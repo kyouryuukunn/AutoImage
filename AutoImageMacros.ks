@@ -29,7 +29,7 @@
 	@image * visible=true page=back
 	@if exp="!mp.multi"
 		@AutoImage_cml *
-		@trans method=crossfade time=%time|500
+		@trans method=%tmethod|crossfade time=%time|500
 		@wt
 		@AutoImage_sml *
 	@endif
@@ -40,7 +40,7 @@
 	@eximage * page=back visible=true
 	@if exp="!mp.multi"
 		@AutoImage_cml *
-		@trans method=crossfade time=%time|500
+		@trans method=%tmethod|crossfade time=%time|500
 		@wt
 		@AutoImage_sml *
 	@endif
@@ -97,7 +97,7 @@
 @image * page=back visible=true left=&kag.fore.layers[mp.layer].left top=&kag.fore.layers[mp.layer].top
 @if exp="!mp.multi"
 	@AutoImage_cml *
-	@trans method=crossfade time=%time|300
+	@trans method=%tmethod|crossfade time=%time|300
 	@wt
 	@AutoImage_sml *
 @endif
@@ -118,7 +118,7 @@
 @eximage * page=back visible=true left=&kag.fore.layers[mp.layer].left top=&kag.fore.layers[mp.layer].top
 @if exp="!mp.multi"
 	@AutoImage_cml *
-	@trans method=crossfade time=%time|300
+	@trans method=%tmethod|crossfade time=%time|300
 	@wt
 	@AutoImage_sml *
 @endif
@@ -154,7 +154,7 @@
 	@freeimage * page=back
 	@if exp="!mp.multi"
 		@AutoImage_cml *
-		@trans method=crossfade time=%time|100
+		@trans method=%tmethod|crossfade time=%time|100
 		@wt
 		@AutoImage_sml *
 	@endif
@@ -211,7 +211,7 @@
 @macro name=AutoImage_multi_trans
 @eval exp="AutoImage.multi.count = 0"
 @AutoImage_cml *
-@trans * method=%method|crossfade time=%time|100
+@trans * method=%tmethod|crossfade time=%time|100
 @wt
 @AutoImage_sml *
 @endmacro
