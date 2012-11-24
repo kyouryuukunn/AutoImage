@@ -1,5 +1,5 @@
 前景画像表示用マクロ
-自動でレイヤを管理し、画像の様々な演出で表示、消去が出来る。
+自動でレイヤを管理し、画像を様々な演出で表示、消去が出来る。
 色々な墓場のキャラクターレイヤ管理プラグインの動作を参考にしているが、
 こっちは立ち絵の整列や位置の自動管理は行なわない
 大部分はKagで書かれており、表示、消去のテンプレートな動作があるなら、
@@ -7,36 +7,43 @@ methodに追加すればよい。
 eximage2.ks,exmove.ksを組み込んでいるので回転拡大縮小移動も可能
 但し上記の2つのプラグインの仕様上背景レイヤには使えない
 またレイヤ番号は f.nameID に入っているので、手動で操作も出来る。
-同じnameIDの画像を複数同時に表示するときは,nameIDは
-nameID_n(数字)となる。小さい順に使われていないものから入る。
-(例)nameID_n0,nameID_n1
+同じnameIDの画像を複数同時に表示するときは,nameIDを複数つくる
 
 (注意)
 上記の2つのプラグインの仕様上一枚絵しか表示できない、pimageとかはできない
 当然nameIDは変数名に出来るものしか指定出来ない。
-AutoImageMacrosで表示したものは必ずAutoImageMacrosで消去するか、
-AutoImage_freelayerで開放する。
+AutoImage2で表示したものは必ずAutoImage2で消去するか、
+freelayerで開放する。
 タイトルなどでは変数を初期化するために必ず@AutoImage_resetを使う
+必要なもの
+
+色々な墓場のTJSFunctions.ks
+TJSに挑戦！のeximage2.ks,exmove.ks
+を落としてくる
+
+使い方
+first.ksで
+call storage=AutoImage2.ks
+とする
+
+
 
 使えるタグ
-AutoImage_image               	:総合操作
-AutoImage_app                 	:画像表示
-AutoImage_emotion             	:差分画像表示
-AutoImage_exemotion           	:回転拡大縮小差分画像表示
-AutoImage_clearimage          	:画像消去
-AutoImage_multi_move          	:同時移動
-AutoImage_multi_exmove        	:同時回転拡大縮小移動
-AutoImage_multi_trans         	:同時トランジション
-AutoImage_name_reg            	:nameID登録
-AutoImage_tempClearAllImage   	:一時的に前景画像を消す
-AutoImage_untempClearAllImage 	:前景画像を表示
-AutoImage_ClearAllImage       	:前景画像を消去
-AutoImage_getlayer            	:管理レイヤを受け取る
-AutoImage_freelayer           	:管理レイヤを開放する
-AutoImage_Init                	:設定する
-AutoImage_reset               	:すべてのnameIDを初期化する
-AutoImage_sml                 	:メッセージレイヤを表示
-AutoImage_cml                 	:メッセージレイヤを消す
+im		: 総合操作
+dis             : 画像消去
+mm              : 同時移動
+mt              : 同時トランジション
+wmm             : 同時移動待ち
+wmt             : 同時トランジション待ち
+name_reg        : nameID登録
+name            : nameIDとtypeを設定
+tempcai         : 一時的に前景画像を消す
+untempcai       : 前景画像を表示
+cai             : 前景画像を消去
+getlayer        : 管理レイヤを受け取る
+freelayer       : 管理レイヤを開放する
+AutoImage_Init  : 設定する
+AutoImage_reset : すべてのnameIDを初期化する
 
 ---------------------------------------------------------------------
 @AutoImage_reset
@@ -47,65 +54,49 @@ nameIDを初期化するタイトルにおくこと
 必須
 layer		:この数以上のレイヤを自動管理にまかせる
 任意
-messagelayer	:メッセージレイヤの枠を前景レイヤに読み込んでいたら、レイヤ番号を指定
-		 deletemsgを設定していたら、このレイヤも動作時に消す
-baselayer	:前景レイヤを背景の代わりに使っていれば、レイヤ番号を指定
-		 このレイヤを指定したとき、left,topのデフォルト値を0,0にする
 
-上記二つのレイヤは自動管理に含まないように
+背景レイヤは自動管理に含まないように
 
-deletemsg	:動作時にメッセージレイヤを消去するかどうか、デフォルトでtrue
-beforetime	:メッセージレイヤを消去する場合、消去してから動作するまでの時間、デフォルトで300
-aftertime	:メッセージレイヤを消去する場合、動作してから表示するまでの時間、デフォルトで300
 (例)
-@call storage=AutoImageMacros.ks
-@AutoImage_Init layer=2 width=242 height=402
+@call storage=AutoImage2.ks
+@AutoImage_Init layer=1
 
-必要な設定をする、何回やってもかまわないが、必ず最初に使うこと。
+必要な設定をする、
 laycountでレイヤが増減してもlayerで指定した番号以上のレイヤ
 は自動で管理する
 
 ---------------------------------------------------------------------------- 
-@AutoImage_image
-任意
-chartop		:一時的に画像の表示位置を設定する
-dm		:メッセージレイヤを消すかどうか
-		 初期値は@AutoImage_Initで設定したもの
-several		:同じnameIDの画像を複数同時に表示する
-		 デフォルト値はfalse
+@im
 
 *下記を参照
 
-nameIDで指定した画像がすでに表示されていたら@AutoImage_emotion,
-本来の画像と幅が違ったら@AutoImage_exemotion
-表示されていなかったら@AutoImage_appを実行する。
-また、一時的に画像の設定を変えられる。
-同じnameIDの画像を複数同時に表示するときは several を true にするか、@AutoImage_appを使うこと
+disが真なら@dis
+nameIDで指定した画像がすでに表示されていたら@diff,
+表示されていなかったら@appを実行する。
+@im name=nameID dis
 
 背景として使う場合は次のマクロを設定して使うとよい(但しファイル名はbase_xxxx)
 本来の背景レイヤと組み合わせることで、演出が広がる。
 @macro name=base
-@im * name=base layer=&AutoImage.baselayer charwidth=&kag.scWidth charheight=&kag.scHeight
+@im * name=base layer=0
 @endmacro
 ---------------------------------------------------------------------------- 
-@AutoImage_app
+@app
 必須
-nameID		:nameIDを指定する
-任意
-emotion		:
-chartop		:一時的に画像の表示位置を設定する
+name		:nameIDを指定する
+type		:type=XXXでもそのままXXXとしてもよい
+		 但し空白ははさめない
+@app name=nameID XXX
 
-nameIDのみを指定した場合name,
-nameIDとemotionを指定した場合nameID_emotionを表示する。
+@nameで設定したnameIDとtypeからファイルを表示する。
 
 layer		:自分でレイヤを指定してもよい
 		 背景として使うならここも指定する
 
 multi		:同時実行する。デフォルト値はfalse
-		 methodがt,et,m,emで指定可能
-		 設定後にmethod=t,etなら@AutoImage_multi_trans
-		 設定後にmethod=mなら@AutoImage_multi_move
-		 設定後にmethod=emなら@AutoImage_multi_exmove
+		 methodがt,mで指定可能
+		 設定後にmethod=t,tなら@mt
+		 設定後にmethod=mなら@mm
 		 で実行する
 		 multiを使ったら、すぐに実行すること、
 		 間にセーブ可能ラベルを挟まない。
@@ -114,14 +105,11 @@ multi		:同時実行する。デフォルト値はfalse
 
 
 method		:表示方法を指定デフォルト値はt
-dm		:メッセージレイヤを消すかどうか
-		 初期値は@AutoImage_Initで設定したもの
 
 *下記参照
 
 前景画像表示
 自動でレイヤを管理し、画像の様々な演出で表示が出来る。
-method=et,em,enはeximage2.ks,exmove.ksを入れいるときのみ可能
 またレイヤ番号は f.nameID に入っている。
 (注意)
 一枚絵しか表示できない
@@ -129,88 +117,54 @@ method=et,em,enはeximage2.ks,exmove.ksを入れいるときのみ可能
 
 method=t
 トランジションで表示
-left,topを設定しておけば、任意の場所における,
-トランジションのmethodはtmethodで指定する。
-その他はimage,transを同じ
-@app name=nameID emotion= method=(t) layer=() pos=(center) multi=(false)  time=(500) left=(0 layer=0の時のみ) top=(0 layer=0の時のみ) opacity= fliplr= flipud clipheight== clipwidth= cliptop= clipleft=
-
-method=et
-トランジションで表示
 回転拡大縮小してトランジションで表示
 left,topを設定しておけば、任意の場所における,
 トランジションのmethodはtmethodで指定する。
 その他はeximage,transを同じ
-@app name=nameID emotion= method=(et) layer=() pos=(center) multi=(false)  time=(500) left=(0 layer=0の時のみ) top=(0 layer=0の時のみ) opacity= scale= angle= xblur= yblur= fliplr= flipud clipheight== clipwidth= cliptop= clipleft=
+@app name=nameID type= method=t pos=(center) multi=(false)  time=(500)
 
 method=m
-fromから移動して表示
-left,topを設定すると、left,topで指定した位置にfromから移動して表示
-left,top,pathを設定すると、任意の場所から任意の場所に移動
-その他はimage,moveを同じ
-@app name=nameID emotion= method=m   layer=() pos=(center) from=(right) accel= time=(500) fliplr= flipud clipheight== clipwidth= cliptop= clipleft=
-
-method=em
 任意の場所から回転拡大縮小しながら任意の場所に表示
-left,topから、pathに移動して表示
+pathを設定すると、left,topから、pathに移動して表示
+(拡大縮小回転を伴うとき、pathの第一、第二引数は画像の中心を示す)
 fromを設定すると、left,topで指定した位置にfromから移動して表示
 その他はeximage,exmoveを同じ
-@app name=nameID emotion= method=em   layer=() accel= time=(500) from= left=(0 layer=0の時のみ) top=(0 layer=0の時のみ) path=(400,300,255,100,0) scale= angle= xblur= yblur= spline= opacity cx= cy= fliplr= flipud clipheight== clipwidth= cliptop= clipleft=
+@app name=nameID type= method=m accel= time=(500) from=(left)
 
 method=n
 直接表画面に表示
-その他はimageを同じ
-@app name=nameID emotion= method=n    layer=() pos=(center) left= top= opacity= fliplr= flipud clipheight== clipwidth= cliptop= clipleft= 
-
-method=en
-回転拡大縮小して直接表画面に表示
 その他はeximageを同じ
-@app name=nameID emotion= method=en   layer=() pos=(center) left= top= opacity= scale= angle= xblur= yblur= fliplr= flipud clipheight== clipwidth= cliptop= clipleft=
+@app name=nameID type= method=n
 
 ---------------------------------------------------------------------------- 
-@AutoImage_emotion
+@diff
 必須
 nameID		:nameIDを指定する
-emotion		:
-nameID_emotionが表示される。
+type		:type=XXXでもそのままXXXとしてもよい
+		 但し空白ははさめない
 任意
 multi		:デフォルト値false
-		 設定後@AutoImage_multi_trans
+		 設定後@mtで@wmtで待つ
 		 で実行
-dm		:メッセージレイヤを消すかどうか
-		 初期値は@AutoImage_Initで設定したもの
 tmethod		:transのmethodと同じ
 表情を変える、(つまり差分表示)
-その他はimageを同じ
+scaleによる拡大縮小だけなら自動で調整する
+xscale,yscaleや回転をしてたら自分で指定する
+@wtで待つ
 
----------------------------------------------------------------------------- 
-@AutoImage_exemotion
-必須
-nameID		:nameIDを指定する
-emotion		:
-nameID_emotionが表示される。
-任意
-multi		:デフォルト値false
-		 設定後@AutoImage_multi_trans
-		 で実行
-dm		:メッセージレイヤを消すかどうか
-		 初期値は@AutoImage_Initで設定したもの
-tmethod		:transのmethodと同じ
-表情を変える、(つまり差分表示)回転してたら自分で指定する
-設定した以外の大きさの画像を使って回転拡大縮小してたらそれも自分で指定する
 その他はeximageを同じ
 
 
 ---------------------------------------------------------------------------- 
-@AutoImage_clearimage
+@dis
 必須
 nameID		:nameIDを指定する
 
 任意
 multi		:同時実行する。デフォルト値はfalse
-		 methodがt,m,emで指定可能
-		 設定後にmethod=t,etなら@AutoImage_multi_trans
-		 設定後にmethod=mなら@AutoImage_multi_move
-		 設定後にmethod=emなら@AutoImage_multi_exmove
+		 methodがt,mで指定可能
+		 設定後にmethod=t,なら@mt
+		 設定後にmethod=mなら@mm
 		 で実行する
 		 multiを使ったら、すぐに実行すること、
 		 間にセーブ可能ラベルを挟まない。
@@ -218,8 +172,6 @@ multi		:同時実行する。デフォルト値はfalse
 		 (消去した時点でレイヤが開放してしまう
 
 method		:表示方法を指定デフォルト値はt
-dm		:メッセージレイヤを消すかどうか
-		 初期値は@AutoImage_Initで設定したもの
 
 *下記参照
 
@@ -229,85 +181,66 @@ dm		:メッセージレイヤを消すかどうか
 method=t
 トランジション
 トランジションのmethodはtmethodで指定する。
-@ci name=nameID layer= method=(t) multi=(false) time=
+@dis name=nameID method=(t) multi=(false) time=
 
 method=m
 toに移動して消去
 pathを設定すると任意の場所に移動して消去
-@ci name=nameID layer= method=m path= to=(right) time= accel=
-
-method=em
-任意の場所に回転拡大縮小しながら移動して消去
-pathを設定すると,任意の場所に回転拡大縮小しながら移動,
-@ci name=nameID layer= method=em path= time= accel= spline= cx= cy=
+@dis name=nameID method=m path= to=(right) time= accel=
 
 method=n
 何もせず消去
-@ci name=nameID layer= method=n
+@dis name=nameID method=n
 
 ---------------------------------------------------------------------------- 
-@AutoImage_multi_move
-dm		:メッセージレイヤを消すかどうか
-		 初期値は@AutoImage_Initで設定したもの
+@mm
 一度に複数を移動
+@wmmで待つ
 ---------------------------------------------------------------------------- 
-@AutoImage_multi_exmove
-dm		:メッセージレイヤを消すかどうか
-		 初期値は@AutoImage_Initで設定したもの
-一度に複数を移動
----------------------------------------------------------------------------- 
-@AutoImage_multi_trans
-dm		:メッセージレイヤを消すかどうか
-		 初期値は@AutoImage_Initで設定したもの
+@mt
 一度に複数をトランジション
+@wmtで待つ
 ---------------------------------------------------------------------------- 
-nameID登録
-@AutoImage_name_reg
+@wmm
+---------------------------------------------------------------------------- 
+@wmt
+---------------------------------------------------------------------------- 
+ 前景を一時的に消す(あくまで一時的)
+@tempcai
+---------------------------------------------------------------------------- 
+ 一時的に消した前景を表示
+@untempcai
+---------------------------------------------------------------------------- 
+前景を全て消す
+@cai
+tmethod		:transのmethodと同じ
+他は@transと同じ
+@wmtで待つ
+
+---------------------------------------------------------------------------- 
+レイヤを確保する
+@getlayer
+name		:f.nameIDにレイヤが確保される
+		 ちゃんと開放すること
+---------------------------------------------------------------------------- 
+レイヤを開放する
+@freelayer
+name		:nameIDを指定する
+---------------------------------------------------------------------------- 
+マクロ登録
+@name_reg
 必須
 name		:nameIDを登録
 
 内部で次のように動作している
 @macro name=%name
-@AutoImage_image * name=%name
+@im * name=%name
 @endmacro
 
 設定すれば以後 @nameID と使える
 ---------------------------------------------------------------------------- 
- 前景を一時的に消す(あくまで一時的)
-@AutoImage_tempClearAllImage
-dm		:メッセージレイヤを消すかどうか
-		 初期値は@AutoImage_Initで設定したもの
----------------------------------------------------------------------------- 
- 一時的に消した前景を表示
-@AutoImage_untempClearAllImage
-dm		:メッセージレイヤを消すかどうか
-		 初期値は@AutoImage_Initで設定したもの
----------------------------------------------------------------------------- 
-前景を全て消す
-@AutoImage_ClearAllImage
-dm		:メッセージレイヤを消すかどうか
-		 初期値は@AutoImage_Initで設定したもの
-tmethod		:transのmethodと同じ
----------------------------------------------------------------------------- 
-レイヤを確保する
-@AutoImage_getlayer
-name		:f.nameIDにレイヤが確保される
-		 ちゃんと開放すること
----------------------------------------------------------------------------- 
-レイヤを開放する
-@AutoImage_freelayer
-name		:nameIDを指定する
----------------------------------------------------------------------------- 
-メッセージレイヤを表示
-@AutoImage_sml
-dm		:メッセージレイヤを消すかどうか
-		 初期値は@AutoImage_Initで設定したもの
-at		:メッセージレイヤを表示するまでのウェイト時間
-		 初期値は@AutoImage_Initで設定したもの
----------------------------------------------------------------------------- 
-メッセージレイヤを消す
-@AutoImage_cml
-dm		:メッセージレイヤを消すかどうか
-		 初期値は@AutoImage_Initで設定したもの
-bt		:メッセージレイヤを消去してからのウェイト時間
-		 初期値は@AutoImage_Initで設定したもの
+@name
+nameIDとtypeに対応するファイルを設定する
+@name name=nameID type= storage= top=
+必要なら画像を表示するときの高さも指定する
+デフォルトでは画像の下端で揃える

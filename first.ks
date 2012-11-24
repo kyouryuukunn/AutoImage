@@ -1,4 +1,4 @@
-@call storage=AutoImageMacros.ks
+@call storage=AutoImage2.ks
 @call storage=eximage2.ks
 @call storage=exmove.ks
 @laycount layers= 20
@@ -6,172 +6,240 @@
 @l
 @r
 @endmacro
-@AutoImage_Init layer=2 width=242 height=409
-@camera_Init baselayer=1 width=242 height=409
 
-;@eximage storage=t0 layer=0 visible=true top=0 left=0 angle=45
-;[l]
-;@eximage storage=t0 layer=0 visible=true top=0 left=0 scale=50
-;@im name=t1 method=em left=1 top=1 from=l scale=50 time=1000
-;@im name=t0
-;@exmove layer=&f.t0 path="(0,0,255,50,0)" time=1000
-[l]
-*et
-トランスで回転拡大縮小表示します[lr]
-@im name=t0 method=et scale=200
-[l]
-@im name=t1 left=400 method=et top=200 scale=50 angle=30
-[l]
-同時に表示します[lr]
-@im name=t2 multi=true method=et
-@im name=t3 multi=true method=et left=300 top=20
-@mt
+@AutoImage_Init layer=0
+@name name=t0 type='normal' storage=t0
+@name name=t0 type='normal2' storage=t0_1
+@name name=t0 type='normal3' storage=t0_2
+@name name=t0 type='normal' storage=t0
+@name name=t1 type='normal' storage=t1
+@name name=t2 type='normal' storage=t2
+@name name=t3 type='normal' storage=t3
+@name name=t4 type='normal' storage=t4
+@name_reg name=t0
+@name_reg name=t1
+@name_reg name=t2
+@name_reg name=t3
+@name_reg name=t4
 
+*diff|
+差分表示します[lr]
+@t0 normal
+@wt
 [l]
-@cai
+@t0 normal2
+@wt
 [l]
-*em
-移動で回転拡大縮小表示します[lr]
-@im name=t0 method=em time=1000 path=(300,300,255,200,0)
+@t0 normal3
+@wt
 [l]
-@im name=t1 method=em left=1 top=1 from=l scale=50 time=1000
+消去します
+@t0 dis
+@wt
 [l]
-同時に表示します[lr]
-@im name=t2 multi=true method=em time=1000 scale=200
-@im name=t3 multi=true method=em left=300 top=20 from=b time=1000 scale=40
-@mm
 
-[l]
-移動で回転拡大縮小消去します[lr]
-@ci name=t0 method=em time=1000 to=t
-[l]
-@ci name=t1 method=em path="(300,200,0,50,0)" time=1000
-[l]
-同時に消去します[lr]
-@ci name=t2 multi=true method=em time=1000
-@ci name=t3 multi=true method=em path="(800,300,0,30,0)" time=1000
-@mm
-
-*t
+*t|
 トランスで表示します[lr]
-@im name=t0
+@t0 normal
+@wt
 [l]
-@im name=t1 pos=l
+@t1 pos=l normal
+@wt
 [l]
-@im name=t2 pos=lc
+@t2 pos=lc normal
+@wt
 [l]
-@im name=t3 pos=rc
+@t3 pos=rc normal
+@wt
 [l]
-@im name=t4 method=t pos=r
+@t4 method=t pos=r normal
+@wt
 
 トランスで消去します[lr]
-@ci name=t0
+@t0 dis normal
+@wt
 [l]
-@ci name=t1
+@t1 dis normal
+@wt
 [l]
-@ci name=t2
+@t2 dis normal
+@wt
 [l]
-@ci name=t3
+@t3 dis normal
+@wt
 [l]
-@ci name=t4
+@t4 dis normal
+@wt
 [l]
 
-*m
+*m|
 移動で表示します[lr]
-@im name=t0 method=m from=l  pos=l
+@t0 method=m from=l  pos=l normal
+@wm
 [l]
-@im name=t1 method=m from=t  pos=lc
+@t1 method=m from=t  pos=lc normal
+@wm
 [l]
-@im name=t2 method=m
+@t2 method=m normal
+@wm
 [l]
-@im name=t3 method=m from=bl pos=r
+@t3 method=m from=bl pos=r normal
+@wm
 [l]
-@im name=t4 method=m from=br pos=rc
+@t4 method=m from=br pos=rc normal
+@wm
 [l]
 
 移動で消去します[lr]
-@ci name=t0 method=m
+@t0 dis method=m normal
+@wm
 [l]
-@ci name=t1 method=m to=l
+@t1 dis method=m to=l normal
+@wm
 [l]
-@ci name=t2 method=m to=t
+@t2 dis method=m to=t normal
+@wm
 [l]
-@ci name=t3 method=m to=br
+@t3 dis method=m to=br normal
+@wm
 [l]
-@ci name=t4  method=m to=bl
+@t4 dis  method=m to=bl normal
+@wm
 [l]
 
 移動で表示します2[lr]
-@im name=t0 method=m from=ul  pos=l
+@t0 method=m from=ul  pos=l normal
+@wm
 [l]
-@im name=t1 method=m from=ll  pos=lc
+@t1 method=m from=ll  pos=lc normal
+@wm
 [l]
-@im name=t2 method=m from=b
+@t2 method=m from=b normal
+@wm
 [l]
-@im name=t3 method=m from=ur pos=r
+@t3 method=m from=ur pos=r normal
+@wm
 [l]
-@im name=t4 method=m from=lr pos=rc
+@t4 method=m from=lr pos=rc normal
+@wm
 [l]
 
 移動で消去します2[lr]
-@ci name=t0 method=m to=ul
+@t0 dis method=m to=ul normal
+@wm
 [l]
-@ci name=t1 method=m to=ll
+@t1 dis method=m to=ll normal
+@wm
 [l]
-@ci name=t2 method=m to=ur
+@t2 dis method=m to=ur normal
+@wm
 [l]
-@ci name=t3 method=m to=lr
+@t3 dis method=m to=lr normal
+@wm
 [l]
-@ci name=t4  method=m to=b
+@t4 dis  method=m to=b normal
+@wm
 [l]
 
-*mm
+*mm|
 同時に移動で表示[lr]
-@im name=t0 pos=l method=m multi=true from=ul  time=500
-@im name=t1 pos=lc method=m multi=true from=ul time=500
-@im name=t2 pos=c method=m multi=true from=ul  time=500
+@t0 pos=l method=m multi=true from=ul  time=500 normal
+@t1 pos=lc method=m multi=true from=ul time=500 normal
+@t2 pos=c method=m multi=true from=ul  time=500 normal
 @mm
+@wmm
 同時に移動で消去[lr]
-@ci name=t0 method=m multi=true to=ur time=500
-@ci name=t1 method=m multi=true to=ur time=500
-@ci name=t2 method=m multi=true to=ur time=500
+@t0 dis method=m multi=true to=ur time=500 normal
+@t1 dis method=m multi=true to=ur time=500 normal
+@t2 dis method=m multi=true to=ur time=500 normal
 @mm
+@wmm
 表示と消去を同時に[lr]
-@im name=t0 pos=l method=m multi=true from=ul  time=500
-@im name=t1 pos=lc method=m multi=true from=ul time=500
+@t0 pos=l method=m multi=true from=ul  time=500 normal
+@t1 pos=lc method=m multi=true from=ul time=500 normal
 @mm
+@wmm
 [lr]
 
-@im name=t2 pos=c method=m multi=true time=500 from=ll
-@im name=t3 pos=rc method=m multi=true time=500 from=r
-@ci name=t0 method=m multi=true time=500 from=br
-@ci name=t1 method=m multi=true time=500 from=ur
+@t2 pos=c method=m multi=true time=500 from=ll normal
+@t3 pos=rc method=m multi=true time=500 from=r normal
+@t0 dis method=m multi=true time=500 from=br normal
+@t1 dis method=m multi=true time=500 from=ur normal
 @mm
+@wmm
 [lr]
 
-*mt
+*mt|
 同時にトランスで表示[lr]
-@im name=t0 pos=l multi=true
-@im name=t1 pos=lc multi=true
+@t0 pos=l multi=true normal
+@t1 pos=lc multi=true normal
 @mt
+@wmt
 
 同時にトランスで消去[lr]
-@ci name=t2 multi=true
-@ci name=t3 multi=true
+@t2 dis multi=true normal
+@t3 dis multi=true normal
 @mt
+@wmt
 
 表示と消去を同時に[lr]
-@im name=t2 pos=r  multi=true
-@im name=t3 pos=rc multi=true
-@ci name=t0 multi=true
-@ci name=t1 multi=true
+@t2 pos=r  multi=true normal
+@t3 pos=rc multi=true normal
+@t0 dis multi=true normal
+@t1 dis multi=true normal
 @mt
+@wmt
 
-*cac
+*cac|
 一時的に全部消します[lr]
 @tempcai
 表示します[lr]
 @untempcai
 全部消します[lr]
 @cai
+@wmt
 [l]
+
+*et|
+トランスで回転拡大縮小表示します[lr]
+@t0 method=t scale=200 normal
+@wt
+[l]
+@t1 left=400 method=t top=200 scale=50 angle=30 normal
+@wt
+[l]
+同時に表示します[lr]
+@t2 multi=true method=t normal
+@t3 multi=true method=t left=300 top=20 normal
+@mt
+@wmt
+
+[l]
+@cai
+@wmt
+[l]
+*em|
+移動で回転拡大縮小表示します[lr]
+@t0 method=m time=1000 path=(300,300,255,200,0) normal
+[l]
+@t1 method=m left=1 top=1 from=l scale=50 time=1000 normal
+[l]
+同時に表示します[lr]
+@t2 multi=true method=m time=1000 scale=200 normal
+@t3 multi=true method=m left=300 top=20 from=b time=1000 scale=40 normal
+@mm
+@wmm
+
+[l]
+移動で回転拡大縮小消去します[lr]
+@t0 dis method=m time=1000 to=t normal
+[l]
+@t1 dis method=m path="(300,200,0,50,0)" time=1000 normal
+[l]
+同時に消去します[lr]
+@t2 dis multi=true method=m time=1000 normal
+@t3 dis multi=true method=m path="(800,300,0,30,0)" time=1000 normal
+@mm
+@wmm
+[l]
+@AutoImage_reset
