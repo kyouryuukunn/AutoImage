@@ -15,6 +15,7 @@ eximage2.ks,exmove.ksを組み込んでいるので回転拡大縮小移動も可能
 AutoImage2で表示したものは必ずAutoImage2で消去するか、
 freelayerで開放する。
 タイトルなどでは変数を初期化するために必ず@AutoImage_resetを使う
+pathの指定はexmove.ksを参照
 必要なもの
 
 色々な墓場のTJSFunctions.ks
@@ -55,7 +56,7 @@ nameIDを初期化するタイトルにおくこと
 layer		:この数以上のレイヤを自動管理にまかせる
 任意
 
-背景レイヤは自動管理に含まないように
+代替背景レイヤは自動管理に含まないように
 
 (例)
 @call storage=AutoImage2.ks
@@ -75,7 +76,7 @@ nameIDで指定した画像がすでに表示されていたら@diff,
 表示されていなかったら@appを実行する。
 @im name=nameID dis
 
-背景として使う場合は次のマクロを設定して使うとよい(但しファイル名はbase_xxxx)
+代替背景として使う場合は次のマクロを設定して使うとよい
 本来の背景レイヤと組み合わせることで、演出が広がる。
 @macro name=base
 @im * name=base layer=0
@@ -146,6 +147,10 @@ type		:type=XXXでもそのままXXXとしてもよい
 multi		:デフォルト値false
 		 設定後@mtで@wmtで待つ
 		 で実行
+method		:デフォルト値はt
+		 tならトランジション
+		 mtならトランジションしながら
+		 移動する
 tmethod		:transのmethodと同じ
 表情を変える、(つまり差分表示)
 scaleによる拡大縮小だけなら自動で調整する

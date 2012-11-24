@@ -11,19 +11,35 @@
 @name name=t0 type='normal' storage=t0
 @name name=t0 type='normal2' storage=t0_1
 @name name=t0 type='normal3' storage=t0_2
-@name name=t0 type='normal' storage=t0
-@name name=t1 type='normal' storage=t1
-@name name=t2 type='normal' storage=t2
-@name name=t3 type='normal' storage=t3
-@name name=t4 type='normal' storage=t4
+@name name=t0 type='normal'  storage=t0
+@name name=t1 type='normal'  storage=t1
+@name name=t2 type='normal'  storage=t2
+@name name=t3 type='normal'  storage=t3
+@name name=t4 type='normal'  storage=t4
+@name name=t5 type='normal'  storage=t5
+@name name=t6 type='normal'  storage=t6
+@name name=t7 type='normal'  storage=t7
+@name name=t8 type='normal'  storage=t8
+@name name=t9 type='normal'  storage=t9
+@name name=t10 type='normal' storage=t10
+@name name=t11 type='normal' storage=t11
+@name name=t12 type='normal' storage=t12
 @name_reg name=t0
 @name_reg name=t1
 @name_reg name=t2
 @name_reg name=t3
 @name_reg name=t4
+@name_reg name=t5
+@name_reg name=t6
+@name_reg name=t7
+@name_reg name=t8
+@name_reg name=t9
+@name_reg name=t10
+@name_reg name=t11
+@name_reg name=t12
 
-*diff|
-差分表示します[lr]
+*diff1|
+差分表示します1[lr]
 @t0 normal
 @wt
 [l]
@@ -33,14 +49,48 @@
 @t0 normal3
 @wt
 [l]
-消去します
+消去します[lr]
+@t0 dis
+@wt
+[l]
+
+*diff2|
+差分表示します2[lr]
+@t0 normal scale=200
+@wt
+[l]
+@t0 normal2
+@wt
+[l]
+@t0 normal3
+@wt
+[l]
+消去します[lr]
+@t0 dis
+@wt
+[l]
+
+*diff2|
+移動しながらトランジション[lr]
+@t0 normal scale=200
+@wt
+@wm
+[l]
+@t0 normal2 method='mt' path="(0, 0, 255, 200, 0)"
+@wt
+@wm
+[l]
+@t0 normal3
+@wt
+[l]
+消去します[lr]
 @t0 dis
 @wt
 [l]
 
 *t|
 トランスで表示します[lr]
-@t0 normal
+@t0 pos=c normal
 @wt
 [l]
 @t1 pos=l normal
@@ -55,6 +105,7 @@
 @t4 method=t pos=r normal
 @wt
 
+*tdis|
 トランスで消去します[lr]
 @t0 dis normal
 @wt
@@ -72,38 +123,59 @@
 @wt
 [l]
 
-*m|
-移動で表示します[lr]
+*ml|
+移動で表示, 消去します1[lr]
 @t0 method=m from=l  pos=l normal
 @wm
 [l]
 @t1 method=m from=t  pos=lc normal
 @wm
 [l]
-@t2 method=m normal
+@t2 method=m from=r pos=c normal
 @wm
 [l]
-@t3 method=m from=bl pos=r normal
+@t3 method=m from=b pos=rc normal
 @wm
 [l]
-@t4 method=m from=br pos=rc normal
+@t4 method=m from=bl pos=r normal
 @wm
 [l]
 
-移動で消去します[lr]
-@t0 dis method=m normal
+*mdis|
+@t0 dis method=m to=l normal
 @wm
 [l]
-@t1 dis method=m to=l normal
+@t1 dis method=m to=t normal
 @wm
 [l]
-@t2 dis method=m to=t normal
+@t2 dis method=m to=r normal
 @wm
 [l]
-@t3 dis method=m to=br normal
+@t3 dis method=m to=b normal
 @wm
 [l]
 @t4 dis  method=m to=bl normal
+@wm
+[l]
+
+@t5 method=m from=bt pos=l normal
+@wm
+[l]
+@t6 method=m from=br pos=lc normal
+@wm
+[l]
+@t7 method=m from=bb pos=c normal
+@wm
+[l]
+
+*mdis2|
+@t5 dis  method=m to=bt normal
+@wm
+[l]
+@t6 dis  method=m to=br normal
+@wm
+[l]
+@t7 dis  method=m to=bb normal
 @wm
 [l]
 
@@ -114,16 +186,17 @@
 @t1 method=m from=ll  pos=lc normal
 @wm
 [l]
-@t2 method=m from=b normal
+@t2 method=m from=b pos=c normal
 @wm
 [l]
-@t3 method=m from=ur pos=r normal
+@t3 method=m from=ur pos=rc normal
 @wm
 [l]
-@t4 method=m from=lr pos=rc normal
+@t4 method=m from=lr pos=r normal
 @wm
 [l]
 
+*mdis3|
 移動で消去します2[lr]
 @t0 dis method=m to=ul normal
 @wm

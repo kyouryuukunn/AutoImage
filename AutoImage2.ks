@@ -1,8 +1,5 @@
 @return cond="typeof(global.AutoImage_obj) !== 'undefined'"
-
-@call storage=AutoImage2.ks
-@call storage=eximage2.ks
-@call storage=exmove.ks
+@call storage=TJSFunctions.ks
 
 @macro name=name        
 @eval exp="AutoImage_obj.setname(mp)"
@@ -10,45 +7,54 @@
 
 
 @macro name=im
-@if exp="AutoImage_obj.names[mp.name].nowcount > 0"
+@if exp="mp.dis"
+	@trace exp="'[dis]'"
+	@dis *
+@elsif exp="AutoImage_obj.names[mp.name].nowcount > 0"
+	@trace exp="'[diff]'"
 	@diff *
 @else
+	@trace exp="'[app]'"
 	@app *
 @endif
 @endmacro
 
 
 @macro name=app
-@eval exp="mp.layer = AutoImage_obj.getlayer()"
-@eval exp="mp.type = AutoImage_obj.gettype() if mp.type === void"
+@eval exp="mp.layer = AutoImage_obj.getlayer(mp)"
+@eval exp="mp.type = AutoImage_obj.gettype(mp) if mp.type === void"
 @eval exp="mp.storage = AutoImage_obj.namedata[mp.name][mp.type].storage"
 @eval exp="AutoImage_obj.names[mp.name].nowtype = mp.type"
 @eval exp="AutoImage_obj.names[mp.name].nowcount += 1"
 @eval exp="AutoImage_obj.names[mp.name].nowlayer = mp.layer"
 @eval exp="f[mp.name] = mp.layer"
-
 @eval exp="mp.method = 't' if mp.method === void"
+@eval exp="mp.time = 500 if mp.time === void"
+
 @if exp="mp.method == 't'"
-	@backlay cond="AutoImag_obj.count==0"
-	@eval exp="AutoImag_obj.count+=1 if mp.multi"
+	@trace exp="'method=t'"
+	@backlay cond="AutoImage_obj.count==0"
+	@eval exp="AutoImage_obj.count+=1 if mp.multi"
 	@eval exp="AutoImage_obj.set_app_position(mp)"
-	@eximage * page=back visible=true
+	@eximage * page=back visible=true opacity=%opacity|255
 	@if exp="!mp.multi"
-		@trans method=%tmethod|crossfade time=%time|500
+		@eval exp="delete mp.layer"
+		@trans * method=%tmethod|crossfade
 	@endif
 @elsif exp="mp.method == 'm'"
+	@trace exp="'method=m'"
 	@eval exp="AutoImage_obj.set_app_position(mp)"
-	@eximage * visible=true
+	@eximage * visible=true 
 	@if exp="!mp.multi"
-		@exmove * time=%time|500
+		@exmove *
 	@else
-		@eval exp="mp.time = 500 if mp.time === void"
 		@eval exp="AutoImage_obj.multistock(mp)"
 		@eval exp="AutoImage_obj.count+=1"
 	@endif
 @elsif exp="mp.method == 'n'"
+	@trace exp="'method=n'"
 	@eval exp="AutoImage_obj.set_app_position(mp)"
-	@eximage * page=fore visible=true
+	@eximage * page=fore visible=true opacity=%opacity|255
 @endif
 @endmacro
 
@@ -59,12 +65,22 @@
 @eval exp="mp.layer = AutoImage_obj.names[mp.name].nowlayer"
 @eval exp="mp.type = AutoImage_obj.gettype(mp) if mp.type === void"
 @eval exp="mp.storage = AutoImage_obj.namedata[mp.name][mp.type].storage"
+@eval exp="mp.time = 500 if mp.time === void"
 
-@backlay cond="AutoImage_obj.count==0"
-@eval exp="AutoImage_obj.count+=1 if mp.multi"
-@eximage * page=back visible=true left=&kag.fore.layers[mp.layer].left top=&kag.fore.layers[mp.layer].top yscale="&(kag.fore.layer[mp.layer].height/AutoImage_obj.namedata[mp.name][AutoImag_obj.names[mp.name].nowtype].height)*100" xscale="&(kag.fore.layer[mp.layer].width/AutoImage_obj.namedata[mp.name][AutoImag_obj.names[mp.name].nowtype].width)*100"
-@if exp="!mp.multi"
-	@trans method=%tmethod|crossfade time=%time|300
+@eval exp="mp.method = 't' if mp.method === void"
+@if exp="mp.method == 't'"
+	@backlay cond="AutoImage_obj.count==0"
+	@eval exp="AutoImage_obj.count+=1 if mp.multi"
+	@eximage * page=back visible=true left="&kag.fore.layers[mp.layer].left" top="&kag.fore.layers[mp.layer].top" scale="&AutoImage_obj.names[mp.name].nowscale"
+	@if exp="!mp.multi"
+		@eval exp="delete mp.layer"
+		@trans * method=%tmethod|crossfade
+	@endif
+@elsif exp="mp.method == 'mt'"
+	@backlay
+	@eximage * page=back visible=true left="&kag.fore.layers[mp.layer].left" top="&kag.fore.layers[mp.layer].top" scale="&AutoImage_obj.names[mp.name].nowscale"
+	@trans * method=%tmethod|crossfade
+	@exmove *
 @endif
 @eval exp="AutoImage_obj.names[mp.name].nowtype = mp.type"
 @endmacro
@@ -92,20 +108,23 @@
 @macro name=dis
 @eval exp="mp.layer = AutoImage_obj.names[mp.name].nowlayer"
 @eval exp="mp.method = 't' if mp.method === void"
+@eval exp="mp.time = 500 if mp.time === void"
+
 @if exp="mp.method == 't'"
 	@backlay cond="AutoImage_obj.count==0"
 	@eval exp="AutoImage_obj.count+=1 if mp.multi"
 	@freeimage * page=back
 	@if exp="!mp.multi"
-		@trans method=%tmethod|crossfade time=%time|100
+		@eval exp="mp.temp_layer = mp.layer"
+		@eval exp="delete mp.layer"
+		@trans * method=%tmethod|crossfade
+		@eval exp="mp.layer = mp.temp_layer"
 	@endif
 @elsif exp="mp.method == 'm'"
-	@eval exp="AutoImag_obj.set_dis_position(mp)"
+	@eval exp="AutoImage_obj.set_dis_position(mp)"
 	@if exp="!mp.multi"
-		@exmove * time=%time|500
-		@freeimage * page=fore
+		@exmove *
 	@else
-		@eval exp="mp.time = 500 if mp.time === void"
 		@eval exp="AutoImage_obj.multistock(mp)"
 		@eval exp="AutoImage_obj.count+=1"
 	@endif
@@ -118,25 +137,26 @@
 ;一度に複数を移動
 @macro name=mm
 ;待ちのためにバックアップ
-@eval exp="AutoImag_obj.pre_count = AutoImag_obj.count"
-@call storage="AutoImageMacros.ks" target="*multi_move"
-@eval exp="AutoImag_obj.count = 0"
+@eval exp="AutoImage_obj.pre_count = AutoImage_obj.count"
+@call storage="AutoImage2.ks" target="*multi_move"
+@eval exp="AutoImage_obj.count = 0"
+@eval exp="AutoImage_obj.multi.clear()"
 @endmacro
 
 @macro name=wmm
-@call storage=AutoImageMacros.ks target=*multi_wm
+@call storage=AutoImage2.ks target=*multi_wm
 @endmacro
 
 ;一度に複数をトランジション
 @macro name=mt
 ;待ちのためにバックアップ
-@eval exp="AutoImag_obj.pre_count = AutoImag_obj.count"
-@trans * method=%tmethod|crossfade time=%time|100
-@eval exp="AutoImag_obj.count = 0"
+@eval exp="AutoImage_obj.pre_count = AutoImage_obj.count"
+@trans * method=%tmethod|crossfade time=%time|500
+@eval exp="AutoImage_obj.count = 0"
 @endmacro
 
 @macro name=wmt
-@call storage=AutoImageMacros.ks target=*multi_wt
+@call storage=AutoImage2.ks target=*multi_wt
 @endmacro
 
 ;nameID登録
@@ -184,37 +204,46 @@
 
 ;nameID初期化
 @macro name=AutoImage_reset
-@eval exp="reset()"
+@eval exp="AutoImage_obj.reset()"
 @endmacro
 
 
 @iscript
 
-class AutoImage() extends KAGPlugin
+class AutoImage extends KAGPlugin
 {
 
 var multi = [];
-var names = %[]; // type
-                 // nowtype
-                 // nowlayer
-                 // nowcount
+var names = %[]; //name
+			 // nowtype
+			 // nowlayer
+			 // nowcount
+			 // nowscale
 var namedata = %[];
-                 // type
-			 // storage
-			 // width
-			 // height
+                 //name   type
+				 // storage
+				 // width
+				 // height
 var autolayer; //プラグインが管理するレイヤ
 var chosedlayer = %[]; //使用済レイヤ
 var count = 0; //マルチトランス、ムーブのためのカウンｔ
 var pre_count = 0; //マルチトランス、ムーブのためのカウント
+f.AutoImage_dic = %[];
 
 	function onStore(f, elm)
 	{
 		var dic = f.AutoImage_dic = %[];
-			// f.exSystemButtons に辞書配列を作成
-		dic.names = names;
-		dic.multi = multi;
-		dic.chosedlayer = chosedlayer;
+		dic.names = %[];
+		var namekeys = keys(names);
+		for (var i = 0; i < namekeys.count; i++)
+		{
+			dic.names[namekeys[i]] = %[];
+			(Dictionary.assign incontextof dic.names[namekeys[i]])(names[namekeys[i]]);
+		}
+		dic.multi = [];
+		dic.multi.assign(multi);
+		dic.chosedlayer = %[];
+		(Dictionary.assign incontextof dic.chosedlayer)(chosedlayer);
 		dic.count = count;
 		dic.pre_count = pre_count;
 	}
@@ -225,13 +254,13 @@ var pre_count = 0; //マルチトランス、ムーブのためのカウント
 		var dic = f.AutoImage_dic;
 		if(dic === void)
 		{
-			reset()
+			reset();
 		}
 		else
 		{
-			names = dic.names;
-			multi = dic.multi;
-			chosedlayer = dic.chosedlayer;
+			(Dictionary.assign incontextof names)(dic.names);
+			multi.assign(dic.multi);
+			(Dictionary.assign incontextof chosedlayer)(dic.chosedlayer);
 			count = dic.count;
 			pre_count = dic.pre_count;
 		}
@@ -245,24 +274,27 @@ var pre_count = 0; //マルチトランス、ムーブのためのカウント
 			var templayer = new Layer(kag, kag.back.base);
 			templayer.loadImages(.storage);
 			templayer.setSizeToImageSize();
-			namedate[.name][.type].width = templayer.width;
-			namedate[.name][.type].height = templayer.height;
+			names[.name] = %[] if names[.name] === void;
+			namedata[.name] = %[] if namedata[.name] === void;
+			namedata[.name][.type] = %[];
+			namedata[.name][.type].width = templayer.width;
+			namedata[.name][.type].height = templayer.height;
 			invalidate templayer;
 			
-			//if (.left !== void)		{AutoImage.char.left		= .left;}		else {AutoImage.char.left		= kag.scPositionX.left - AutoImage.char.width/2;}
-			//if (.left_center !== void)	{AutoImage.char.left_center 	= .left_center;} 	else {AutoImage.char.left_center	= kag.scPositionX.left_center - AutoImage.char.width/2;}
-			//if (.center !== void)		{AutoImage.char.center		= .center;}		else {AutoImage.char.center		= kag.scPositionX.center - AutoImage.char.width/2;}
-			//if (.right_center !== void)	{AutoImage.char.right_center    = .right_center;}	else {AutoImage.char.right_center	= kag.scPositionX.right_center - AutoImage.char.width/2;}
-			//if (.right !== void)		{AutoImage.char.right		= .right;} 		else {AutoImage.char.right		= kag.scPositionX.right - AutoImage.char.width/2;}
-			
-			namedate[.name][.type].top          = .top === void ? kag.scHeight - namedate[.name][.type].height : .top;
-			namedate[.name][.type].left         = kag.scPositionX.left         - namedate[.name][.type].width/2;
-			namedate[.name][.type].left_center  = kag.scPositionX.left_center  - namedate[.name][.type].width/2;
-			namedate[.name][.type].center       = kag.scPositionX.center       - namedate[.name][.type].width/2;
-			namedate[.name][.type].right_center = kag.scPositionX.right_center - namedate[.name][.type].width/2;
-			namedate[.name][.type].right        = kag.scPositionX.right        - namedate[.name][.type].width/2;
-			
-			namedate[.name][.type].storage = .storage;
+			namedata[.name][.type].top     = .top === void ? kag.scHeight - namedata[.name][.type].height : .top;
+			namedata[.name][.type].storage = .storage;
+		}
+	}
+	function pos_to_LeftTop(elm)
+	{
+		with(elm)
+		{
+			.top  = namedata[.name][.type].top;
+			.left = kag.scPositionX.left         - namedata[.name][.type].width * .scale / 100 / 2 if .pos ==  'l'  || .pos == 'left';
+			.left = kag.scPositionX.left_center  - namedata[.name][.type].width * .scale / 100 / 2 if .pos ==  'lc' || .pos == 'left_center';
+			.left = kag.scPositionX.center       - namedata[.name][.type].width * .scale / 100 / 2 if .pos ==  'c'  || .pos == 'center';
+			.left = kag.scPositionX.right_center - namedata[.name][.type].width * .scale / 100 / 2 if .pos ==  'rc' || .pos == 'right_center';
+			.left = kag.scPositionX.right        - namedata[.name][.type].width * .scale / 100 / 2 if .pos ==  'r'  || .pos == 'right';
 		}
 	}
 	//レイヤーを開放
@@ -271,6 +303,7 @@ var pre_count = 0; //マルチトランス、ムーブのためのカウント
 		chosedlayer[elm.layer] = false;
 		names[elm.name].nowcount -= 1;
 		delete names[elm.name].nowtype;
+		delete names[elm.name].nowscale;
 		delete names[elm.name].nowlayer;
 		delete f[elm.name];
 	}
@@ -303,10 +336,10 @@ var pre_count = 0; //マルチトランス、ムーブのためのカウント
 		{
 			if (chosedlayer[i])
 			{
-				var keys = keys(names);
-				for (var n = 0; n < keys.count; n++)
+				var namekeys = keys(names);
+				for (var n = 0; n < namekeys.count; n++)
 				{
-					freelayer(%[name:keys[n], layer:names[keys[n]].nowlayer]) if (names[keys[n]][nowcount] > 0);
+					freelayer(%[name:namekeys[n], layer:names[namekeys[n]].nowlayer]) if (names[namekeys[n]].nowcount > 0);
 				}
 			}
 		}
@@ -318,15 +351,11 @@ var pre_count = 0; //マルチトランス、ムーブのためのカウント
 		for ( var i=autolayer; i<kag.numCharacterLayers; i++ )
 		{
 			if (chosedlayer[i])
-			{
 				kag.back.layers[i].visible=false;
-				var keys = keys(names);
-				for (var n = 0; n < keys.count; n++)
-				{
-					freelayer(%[name:keys[n], layer:names[keys[n]].nowlayer]) if (names[keys[n]][nowcount] > 0);
-				}
-			}
 		}
+		var namekeys = keys(names);
+		for (var n = 0; n < namekeys.count; n++)
+			freelayer(%[name:namekeys[n], layer:names[namekeys[n]].nowlayer]) if (names[namekeys[n]].nowcount > 0);
 	}
 	function tempcac()
 	{
@@ -347,21 +376,17 @@ var pre_count = 0; //マルチトランス、ムーブのためのカウント
 	{
 		with(elm)
 		{
-			if (.left === void && .top === void) .pos = 'center'; //未指定ならposをcenterに
+			if (.left === void && .top === void && .pos === void) .pos = 'center'; //未指定ならposをcenterに
+			.scale = 100 if .scale === void;
+			.angle = 0 if .angle === void;
 			
 			if (.method == 't' || .method == 'n')
 			{
 				if (.left === void && .top === void) //left, topが未指定ならposであわせる
 				{
 					//topを設定するためにposを設定しなおす
-					if (.pos == void) .pos = 'center' //posが未指定ならcenterに
-					if (.pos == 'left' || .pos == 'l') 		.left = namedate[.name][.type].left;
-					if (.pos == 'left_center' || .pos == 'lc')	.left = namedate[.name][.type].left_center;
-					if (.pos == 'center' || .pos == 'c') 		.left = namedate[.name][.type].center;
-					if (.pos == 'right_center'  || .pos == 'rc')	.left = namedate[.name][.type].right_center;
-					if (.pos == 'right' || .pos == 'r') 		.left = namedate[.name][.type].right;
-											.top  = namedate[.name][.type].top;
-					delete .pos //元のposを消す
+					if (.pos == void) .pos = 'center'; //posが未指定ならcenterに
+					pos_to_LeftTop(elm);
 				}
 			}
 			else if (.method == 'm')
@@ -369,20 +394,17 @@ var pre_count = 0; //マルチトランス、ムーブのためのカウント
 				if (.from === void && .path === void) .from = 'left'; //未指定ならfromをleftに
 				if (.from !== void)
 				{
-					.scale = 100 if .scale === void;
-					.angle = 0 if .angle === void;
-					if (.left !== void || .top !== void)		set_position(elm, .left, .top); //left, topが指定されていたら
-					if (.pos == 'left' || .pos == 'l') 		set_position(elm, namedate[.name][.type].left, namedate[.name][.type].top); 
-					if (.pos == 'left_center' || .pos == 'lc')	set_position(elm, namedate[.name][.type].left_center, namedate[.name][.type].top); 
-					if (.pos == 'center' || .pos == 'c') 		set_position(elm, namedate[.name][.type].center, namedate[.name][.type].top); 
-					if (.pos == 'right_center'  || .pos == 'rc')	set_position(elm, namedate[.name][.type].right_center, namedate[.name][.type].top); 
-					if (.pos == 'right' || .pos == 'r') 		set_position(elm, namedate[.name][.type].right, namedate[.name][.type].top); 
+					if (.left === void && .top === void)
+						pos_to_LeftTop(elm);
+					set_position(elm, .left, .top); //left, topが指定されていたら
 				}
 				else if (.path !== void)
 				{
 					.opacity = 0 if .opacity === void;
 				}
 			}
+			names[.name].nowscale = .scale;
+			delete .pos; //元のposを消す
 		}
 	}
 	function set_position(elm, left, top) //指定された座標にfromから移動する
@@ -390,18 +412,18 @@ var pre_count = 0; //マルチトランス、ムーブのためのカウント
 		with(elm)
 		{
 			.path = '(' + left + ', ' + top + ', 255, ' + .scale + ', ' + .angle + ')';
-			if (.from == 'l' || .from == 'left')		{.opacity =   0; .left = left - 30; }
-			if (.from == 'r' || .from == 'right')		{.opacity =   0; .left = left + 30; }
-			if (.from == 'bl' || .from =='bigleft')		{.opacity = 255; .left = 0 - namedate[.name][.type].width*(.scale/100);}
-			if (.from == 'br' || .from == 'bigright')	{.opacity = 255; .left = kag.scWidth;}
-			if (.from == 't' || .from == 'top')		{.opacity =   0; .top  = top - 30;}
-			if (.from == 'b' || .from == 'bottom')		{.opacity =   0; .top  = top + 30;}
-			if (.from == 'bt' || .from == 'bigtop')		{.opacity = 255; .top  = 0 - namedate[.name][.type].height;}
-			if (.from == 'bb' || .from == 'bigbottom')	{.opacity = 255; .top  = kag.scHeight;}
-			if (.from == 'ul' || .from == 'upper left')	{.opacity = 255; .left = 0 - namedate[.name][.type].width*(.scale/100); .top = 0 - namedate[.name][.type].height*(.scale/100);}
-			if (.from == 'll' || .from == 'lower left')	{.opacity = 255; .left = 0 - namedate[.name][.type].width*(.scale/100); .top = 0;}
-			if (.from == 'ur' || .from =='upper right')	{.opacity = 255; .left = kag.scWidth; .top = 0 - namedate[.name][.type].height*(.scale/100);}
-			if (.from == 'lr' || .from == 'lower right')	{.opacity = 255; .left = kag.scWidth; .top = 0;}
+			if (.from == 'l'  || .from == 'left')		{.opacity =   0; .top = top;                                            .left = left - 30; }
+			if (.from == 'r'  || .from == 'right')		{.opacity =   0; .top = top;                                            .left = left + 30; }
+			if (.from == 'bl' || .from =='bigleft')		{.opacity = 255; .top = top;                                            .left = 0 - namedata[.name][.type].width*(.scale/100);}
+			if (.from == 'br' || .from == 'bigright')	{.opacity = 255; .top = top;                                            .left = kag.scWidth;}
+			if (.from == 't'  || .from == 'top')		{.opacity =   0; .top = top - 30;                                       .left = left;}
+			if (.from == 'b'  || .from == 'bottom')		{.opacity =   0; .top = top + 30;                                       .left = left;}
+			if (.from == 'bt' || .from == 'bigtop')		{.opacity = 255; .top = 0 - namedata[.name][.type].height*(.scale/100); .left = left;}
+			if (.from == 'bb' || .from == 'bigbottom')	{.opacity = 255; .top = kag.scHeight;                                   .left = left;}
+			if (.from == 'ul' || .from == 'upper left')	{.opacity = 255; .top = 0 - namedata[.name][.type].height*(.scale/100); .left = 0 - namedata[.name][.type].width*(.scale/100);}
+			if (.from == 'll' || .from == 'lower left')	{.opacity = 255; .top = kag.scHeight;                                   .left = 0 - namedata[.name][.type].width*(.scale/100);}
+			if (.from == 'ur' || .from =='upper right')	{.opacity = 255; .top = 0 - namedata[.name][.type].height*(.scale/100); .left = kag.scWidth;}
+			if (.from == 'lr' || .from == 'lower right')	{.opacity = 255; .top = kag.scHeight;                                   .left = kag.scWidth;}
 		}
 	}
 	function set_dis_position(elm)
@@ -409,31 +431,47 @@ var pre_count = 0; //マルチトランス、ムーブのためのカウント
 		with(elm)
 		{
 			.to = 'left' if .to === void;
-			if (.path !== void)
+			if (.path === void)
 			{
-				.path = '( ' + (kag.fore.layers[.layer].left - 30) + ',  ' + kag.fore.layers[.layer].top 	 + ',0, 100, 0)'        if ( .to=='l'  || .to=='left');
-				.path = '( ' + (kag.fore.layers[.layer].left + 30) + ',  ' + kag.fore.layers[.layer].top 	 + ',0, 100, 0)'        if ( .to=='r'  || .to=='right');
-				.path = '(-' + kag.fore.layers[.layer].width	   + ',  ' + kag.fore.layers[.layer].top 	 + ',0, 100, 0)'        if ( .to=='bl' || .to=='bigleft');
-				.path = '( ' + kag.scWidth 			   + ',  ' + kag.fore.layers[.layer].top 	 + ',0, 100, 0)'        if ( .to=='br' || .to=='bigright');
-				.path = '( ' + kag.fore.layers[.layer].left 	   + ',  ' + kag.fore.layers[.layer].height - 30 + ',0, 100, 0)'	if ( .to=='t'  || .to=='top');
-				.path = '( ' + kag.fore.layers[.layer].left 	   + ',  ' + kag.fore.layers[.layer].height + 30 + ',0, 100, 0)'	if ( .to=='b'  || .to=='bottom');
-				.path = '( ' + kag.fore.layers[.layer].left 	   + ', -' + kag.fore.layers[.layer].height	 + ',255, 100, 0)'	if ( .to=='bt'  || .to=='bigtop');
-				.path = '( ' + kag.fore.layers[.layer].left 	   + ',  ' + kag.scHeight 		  	 + ',255, 100, 0)'	if ( .to=='bb'  || .to=='bigbottom');
-				.path = '(-' + kag.fore.layers[.layer].width 	   + ', -' + kag.fore.layers[.layer].height 	 + ',255, 100, 0)'	if ( .to=='ul' || .to=='upper left');
-				.path = '(-' + kag.fore.layers[.layer].width 	   + ',  ' + kag.scHeight 		  	 + ',255, 100, 0)'	if ( .to=='ll' || .to=='lower left');
-				.path = '( ' + kag.scWidth 			   + ', -' + kag.fore.layers[.layer].height	 + ',255, 100, 0)'	if ( .to=='ur' || .to=='upper right');
-				.path = '( ' + kag.scWidth 			   + ',  ' + kag.scHeight 			 + ',255, 100, 0)'	if ( .to=='lr' || .to=='lower right');
+				.path = '( ' + (kag.fore.layers[.layer].left - 30) + ',  ' + kag.fore.layers[.layer].top 	    + ',0,   ' + names[.name].nowscale + ', 0)' if ( .to=='l'  || .to=='left');
+				.path = '( ' + (kag.fore.layers[.layer].left + 30) + ',  ' + kag.fore.layers[.layer].top 	    + ',0,   ' + names[.name].nowscale + ', 0)' if ( .to=='r'  || .to=='right');
+				.path = '(-' + kag.fore.layers[.layer].width	   + ',  ' + kag.fore.layers[.layer].top 	    + ',0,   ' + names[.name].nowscale + ', 0)' if ( .to=='bl' || .to=='bigleft');
+				.path = '( ' + kag.scWidth 			   + ',  ' + kag.fore.layers[.layer].top 	    + ',0,   ' + names[.name].nowscale + ', 0)' if ( .to=='br' || .to=='bigright');
+				.path = '( ' + kag.fore.layers[.layer].left 	   + ',  ' + (kag.fore.layers[.layer].top - 30)     + ',0,   ' + names[.name].nowscale + ', 0)' if ( .to=='t'  || .to=='top');
+				.path = '( ' + kag.fore.layers[.layer].left 	   + ',  ' + (kag.fore.layers[.layer].top + 30)     + ',0,   ' + names[.name].nowscale + ', 0)' if ( .to=='b'  || .to=='bottom');
+				.path = '( ' + kag.fore.layers[.layer].left 	   + ', -' + kag.fore.layers[.layer].height	    + ',255, ' + names[.name].nowscale + ', 0)' if ( .to=='bt'  || .to=='bigtop');
+				.path = '( ' + kag.fore.layers[.layer].left 	   + ',  ' + kag.scHeight 		  	    + ',255, ' + names[.name].nowscale + ', 0)' if ( .to=='bb'  || .to=='bigbottom');
+				.path = '(-' + kag.fore.layers[.layer].width 	   + ', -' + kag.fore.layers[.layer].height 	    + ',255, ' + names[.name].nowscale + ', 0)' if ( .to=='ul' || .to=='upper left');
+				.path = '(-' + kag.fore.layers[.layer].width 	   + ',  ' + kag.scHeight 		  	    + ',255, ' + names[.name].nowscale + ', 0)' if ( .to=='ll' || .to=='lower left');
+				.path = '( ' + kag.scWidth 			   + ', -' + kag.fore.layers[.layer].height	    + ',255, ' + names[.name].nowscale + ', 0)' if ( .to=='ur' || .to=='upper right');
+				.path = '( ' + kag.scWidth 			   + ',  ' + kag.scHeight 			    + ',255, ' + names[.name].nowscale + ', 0)' if ( .to=='lr' || .to=='lower right');
 			}
 		}
 	}
 	function multistock(elm)
 	{
 		multi.add(%[]);
-		(Dictionary.assign incontextof multi[multi.count-1])(elm);
+		multi[multi.count - 1].path   = elm.path;
+		multi[multi.count - 1].layer  = elm.layer;
+		multi[multi.count - 1].accel  = elm.accel;
+		multi[multi.count - 1].page   = elm.page;
+		multi[multi.count - 1].spline = elm.spline;
+		multi[multi.count - 1].time   = elm.time;
+		multi[multi.count - 1].delay  = elm.delay;
+		multi[multi.count - 1].cx     = elm.cx;
+		multi[multi.count - 1].cy     = elm.cy;
 	}
 	function gettype(elm)
 	{
-		
+		var typekeys = keys(namedata[elm.name]);
+		for (var i = 0; i < typekeys.count; i++)
+		{
+			if (elm[typekeys[i]])
+			{
+				return typekeys[i];
+			}
+		}
+		System.inform('typeを発見出来ず');
 	}
 }
 kag.addPlugin(global.AutoImage_obj = new AutoImage());
@@ -453,22 +491,30 @@ kag.addPlugin(global.AutoImage_obj = new AutoImage());
 @eval exp="var AutoImage_count = 0"
 *loop1
 @iscript
-mp = AutoImage_obj.multi.pop();
+mp.path   = AutoImage_obj.multi[AutoImage_count].path;
+mp.layer  = AutoImage_obj.multi[AutoImage_count].layer;
+mp.accel  = AutoImage_obj.multi[AutoImage_count].accel;
+mp.page   = AutoImage_obj.multi[AutoImage_count].page;
+mp.spline = AutoImage_obj.multi[AutoImage_count].spline;
+mp.time   = AutoImage_obj.multi[AutoImage_count].time;
+mp.delay  = AutoImage_obj.multi[AutoImage_count].delay;
+mp.cx     = AutoImage_obj.multi[AutoImage_count].cx;
+mp.cy     = AutoImage_obj.multi[AutoImage_count].cy;
 @endscript
 @exmove *
-@jump storage=AutoImageMacros.ks target=*loop1 cond="AutoImage_count++ < AutoImage_obj.count"
+@jump storage=AutoImage2.ks target=*loop1 cond="++AutoImage_count < AutoImage_obj.count"
 @return
 
 *multi_wm
 @eval exp="var AutoImage_count = 0"
 *loop2
 @wm
-@jump storage=AutoImageMacros.ks target=*loop2 cond="AutoImage_count++ < AutoImage_obj.pre_count"
+@jump storage=AutoImage2.ks target=*loop2 cond="++AutoImage_count < AutoImage_obj.pre_count"
 @return
 
 *multi_wt
 @eval exp="var AutoImage_count = 0"
 *loop3
 @wt
-@jump storage=AutoImageMacros.ks target=*loop3 cond="AutoImage_count++ < AutoImage_obj.pre_count"
+@jump storage=AutoImage2.ks target=*loop3 cond="++AutoImage_count < AutoImage_obj.pre_count"
 @return
