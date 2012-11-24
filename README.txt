@@ -1,8 +1,11 @@
+赤恐竜	http://akakyouryuu.blog.fc2.com/
+
 前景画像表示用マクロ
+
 自動でレイヤを管理し、画像を様々な演出で表示、消去が出来る。
 色々な墓場のキャラクターレイヤ管理プラグインの動作を参考にしているが、
 こっちは立ち絵の整列や位置の自動管理は行なわない
-大部分はKagで書かれており、表示、消去のテンプレートな動作があるなら、
+大部分はkagで書かれており、表示、消去のテンプレートな動作があるなら、
 methodに追加すればよい。
 eximage2.ks,exmove.ksを組み込んでいるので回転拡大縮小移動も可能
 但し上記の2つのプラグインの仕様上背景レイヤには使えない
@@ -20,19 +23,21 @@ eximage2.ks,exmove.ksを組み込んでいるので回転拡大縮小移動も可能
 当然nameIDは変数名に出来るものしか指定出来ない。
 AutoImage2で表示したものは必ずAutoImage2で消去するか、
 freelayerで開放する。
-タイトルなどでは変数を初期化するために必ず@AutoImage_resetを使う
+タイトル画面などでは変数を初期化するために必ず@AutoImage_resetを使う
 pathの指定はexmove.ksを参照
-必要なもの
 
+必要なもの
 色々な墓場のTJSFunctions.ks
 TJSに挑戦！のeximage2.ks,exmove.ks
 を落としてくる
 
 使い方
-first.ksで
-call storage=AutoImage2.ks
-とする
+first.ksで呼び出した後とする
+初期化する
 
+(例)
+@call storage=AutoImage2.ks
+@AutoImage_Init layer=1
 
 
 使えるタグ
@@ -54,7 +59,7 @@ AutoImage_reset : すべてのnameIDを初期化する
 
 ---------------------------------------------------------------------
 @AutoImage_reset
-nameIDを初期化するタイトルにおくこと
+nameIDを初期化する。タイトルにおくこと
 
 ---------------------------------------------------------------------------- 
 @AutoImage_Init
@@ -72,6 +77,24 @@ layer		:この数以上のレイヤを自動管理にまかせる
 laycountでレイヤが増減してもlayerで指定した番号以上のレイヤ
 は自動で管理する
 
+---------------------------------------------------------------------------- 
+マクロ登録
+@name_reg
+必須
+name		:nameIDを登録
+
+内部で次のように動作している
+@macro name=%name
+@im * name=%name
+@endmacro
+
+設定すれば以後 @nameID と使える
+---------------------------------------------------------------------------- 
+@name
+nameIDとtypeに対応するファイルを設定する
+@name name=nameID type= storage= top=
+必要なら画像を表示するときの高さも指定する
+デフォルトでは画像の下端で揃える
 ---------------------------------------------------------------------------- 
 @im
 
@@ -102,18 +125,16 @@ layer		:自分でレイヤを指定してもよい
 
 multi		:同時実行する。デフォルト値はfalse
 		 methodがt,mで指定可能
-		 設定後にmethod=t,tなら@mt
-		 設定後にmethod=mなら@mm
+		 設定後に
+		 method=tなら@mt
+		 method=mなら@mm
 		 で実行する
-		 multiを使ったら、すぐに実行すること、
-		 間にセーブ可能ラベルを挟まない。
+		 設定後すぐに実行すること、
 		 表示と消去を同時におこなう時は、表示してから消去する
-		 (消去した時点でレイヤが開放してしまう
-
-
+		 (消去した時点でレイヤを開放してしまう)
+		 
 method		:表示方法を指定デフォルト値はt
-
-*下記参照
+		 下記参照
 
 前景画像表示
 自動でレイヤを管理し、画像の様々な演出で表示が出来る。
@@ -128,14 +149,43 @@ method=t
 left,topを設定しておけば、任意の場所における,
 トランジションのmethodはtmethodで指定する。
 その他はeximage,transを同じ
-@app name=nameID type= method=t pos=(center) multi=(false)  time=(500)
+@app name=nameID type=XXX method=t pos=(center) multi=(false)  time=(500)
 
 method=m
 任意の場所から回転拡大縮小しながら任意の場所に表示
 pathを設定すると、left,topから、pathに移動して表示
 (拡大縮小回転を伴うとき、pathの第一、第二引数は画像の中心を示す)
-fromを設定すると、left,topで指定した位置にfromから移動して表示
+fromを設定すると、left,topで指定した位置にfromで指定した方向から移動して表示
+fromには
+	left
+	right
+	bigleft
+	bigright
+	top
+	bottom
+	bigtop
+	bigbottom
+	upper left
+	lower left
+	upper right
+	lower right
+またその省略の
+	l
+	r
+	bl
+	br
+	t
+	b
+	bt
+	bb
+	ul
+	ll
+	ur
+	lr
+を指定可能、それぞれの動作はサンプルを参照
+
 その他はeximage,exmoveを同じ
+
 @app name=nameID type= method=m accel= time=(500) from=(left)
 
 method=n
@@ -151,19 +201,21 @@ type		:type=XXXでもそのままXXXとしてもよい
 		 但し空白ははさめない
 任意
 multi		:デフォルト値false
-		 設定後@mtで@wmtで待つ
-		 で実行
+		 methodがtの時指定可能
+		 設定後@mtで実行、@wmtで待つ
 method		:デフォルト値はt
 		 tならトランジション
 		 mtならトランジションしながら
 		 移動する
 tmethod		:transのmethodと同じ
+
+
+その他はeximageを同じ
+
 表情を変える、(つまり差分表示)
 scaleによる拡大縮小だけなら自動で調整する
 xscale,yscaleや回転をしてたら自分で指定する
 @wtで待つ
-
-その他はeximageを同じ
 
 
 ---------------------------------------------------------------------------- 
@@ -177,8 +229,7 @@ multi		:同時実行する。デフォルト値はfalse
 		 設定後にmethod=t,なら@mt
 		 設定後にmethod=mなら@mm
 		 で実行する
-		 multiを使ったら、すぐに実行すること、
-		 間にセーブ可能ラベルを挟まない。
+		 設定したら、すぐに実行すること、
 		 表示と消去を同時におこなう時は、表示してから消去する
 		 (消去した時点でレイヤが開放してしまう
 
@@ -198,6 +249,33 @@ method=m
 toに移動して消去
 pathを設定すると任意の場所に移動して消去
 @dis name=nameID method=m path= to=(right) time= accel=
+toの引数には
+	left
+	right
+	bigleft
+	bigright
+	top
+	bottom
+	bigtop
+	bigbottom
+	upper left
+	lower left
+	upper right
+	lower right
+またその省略の
+	l
+	r
+	bl
+	br
+	t
+	b
+	bt
+	bb
+	ul
+	ll
+	ur
+	lr
+を指定可能、それぞれの動作はサンプルを参照
 
 method=n
 何もせず消去
@@ -237,21 +315,3 @@ name		:f.nameIDにレイヤが確保される
 レイヤを開放する
 @freelayer
 name		:nameIDを指定する
----------------------------------------------------------------------------- 
-マクロ登録
-@name_reg
-必須
-name		:nameIDを登録
-
-内部で次のように動作している
-@macro name=%name
-@im * name=%name
-@endmacro
-
-設定すれば以後 @nameID と使える
----------------------------------------------------------------------------- 
-@name
-nameIDとtypeに対応するファイルを設定する
-@name name=nameID type= storage= top=
-必要なら画像を表示するときの高さも指定する
-デフォルトでは画像の下端で揃える
