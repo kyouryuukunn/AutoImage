@@ -1,26 +1,26 @@
 @return cond="typeof(global.AutoImage_obj) !== 'undefined'"
 @call storage=TJSFunctions.ks
 
-@macro name=name        
+@macro name=AutoImage_name        
 @eval exp="AutoImage_obj.setname(mp)"
 @endmacro
 
 
-@macro name=im
+@macro name=AutoImage_im
 @if exp="mp.dis"
 	@trace exp="'[dis]'"
-	@dis *
+	@AutoImage_dis *
 @elsif exp="AutoImage_obj.names[mp.name].nowcount > 0"
 	@trace exp="'[diff]'"
-	@diff *
+	@AutoImage_diff *
 @else
 	@trace exp="'[app]'"
-	@app *
+	@AutoImage_app *
 @endif
 @endmacro
 
 
-@macro name=app
+@macro name=AutoImage_app
 @eval exp="mp.layer = AutoImage_obj.getlayer(mp)"
 @eval exp="mp.type = AutoImage_obj.gettype(mp) if mp.type === void"
 @eval exp="mp.storage = AutoImage_obj.namedata[mp.name][mp.type].storage"
@@ -61,7 +61,7 @@
 ;表情を変える、(つまり差分表示)回転してたら自分でscale, angleを指定する
 ;一度に複数の画像を変えるときは、multi=trueにしてまとめて@mtをする。
 ;@diff name=nameID type= multi=false angle= scale=
-@macro name=diff
+@macro name=AutoImage_diff
 @eval exp="mp.layer = AutoImage_obj.names[mp.name].nowlayer"
 @eval exp="mp.type = AutoImage_obj.gettype(mp) if mp.type === void"
 @eval exp="mp.storage = AutoImage_obj.namedata[mp.name][mp.type].storage"
@@ -105,7 +105,7 @@
 
 ;何もせず消去
 ;@dis name=nameID method=n
-@macro name=dis
+@macro name=AutoImage_dis
 @eval exp="mp.layer = AutoImage_obj.names[mp.name].nowlayer"
 @eval exp="mp.method = 't' if mp.method === void"
 @eval exp="mp.time = 500 if mp.time === void"
@@ -135,7 +135,7 @@
 @endmacro
 
 ;一度に複数を移動
-@macro name=mm
+@macro name=AutoImage_mm
 ;待ちのためにバックアップ
 @eval exp="AutoImage_obj.pre_count = AutoImage_obj.count"
 @call storage="AutoImage2.ks" target="*multi_move"
@@ -143,56 +143,56 @@
 @eval exp="AutoImage_obj.multi.clear()"
 @endmacro
 
-@macro name=wmm
+@macro name=AutoImage_wmm
 @call storage=AutoImage2.ks target=*multi_wm
 @endmacro
 
 ;一度に複数をトランジション
-@macro name=mt
+@macro name=AutoImage_mt
 ;待ちのためにバックアップ
 @eval exp="AutoImage_obj.pre_count = AutoImage_obj.count"
 @trans * method=%tmethod|crossfade time=%time|500
 @eval exp="AutoImage_obj.count = 0"
 @endmacro
 
-@macro name=wmt
+@macro name=AutoImage_wmt
 @call storage=AutoImage2.ks target=*multi_wt
 @endmacro
 
 ;nameID登録
 ;name_reg name=nameIDとすれば、
 ;@nameID と使える
-@macro name=name_reg
+@macro name=AutoImage_name_reg
 @call storage=AutoImage2.ks target=*name_reg
 @endmacro
 
 ; 前景を一時的に消す(あくまで一時的)
-@macro name=tempcai
+@macro name=AutoImage_tempcai
 @eval exp="AutoImage_obj.tempcac()"
 @endmacro
 
 ; 一時的に消した前景を表示
-@macro name=untempcai
+@macro name=AutoImage_untempcai
 @eval exp="AutoImage_obj.untempcac()"
 @endmacro
 
 ;;前景クリア
-@macro name=cai
+@macro name=AutoImage_cai
 @backlay
 @eval exp="AutoImage_obj.clearall()"
-@mt
+@AutoImage_mt
 @endmacro
 
 ;レイヤを確保する
 ;@getlayer name=nameID //f.nameIDにレイヤが確保される
 ;ちゃんと開放すること
-@macro name=getlayer
+@macro name=AutoImage_getlayer
 @eval exp="f[mp.name] = AutoImage_obj.getlayer(mp)"
 @endmacro
 
 ;レイヤを開放する
 ;@freelayer name=nameID
-@macro name=freelayer
+@macro name=AutoImage_freelayer
 @eval exp="mp.layer=f[mp.name]"
 @eval exp="AutoImage_obj.freelayer(mp)"
 @endmacro
@@ -483,7 +483,7 @@ kag.addPlugin(global.AutoImage_obj = new AutoImage());
 ;サブルーチン用
 *name_reg
 @macro name=%name
-@im * name=%tagname
+@AutoImage_im * name=%tagname
 @endmacro
 @return
 

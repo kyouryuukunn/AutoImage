@@ -8,25 +8,25 @@
 @endmacro
 
 @AutoImage_Init layer=0
-@name name=t0 type='smile' storage=t0
-@name name=t0 type='cry'   storage=t0_1
-@name name=t0 type='surprise' storage=t0_2
-@name name=t0 type='smile'  storage=t0
-@name name=t1 type='smile'  storage=t1
-@name name=t2 type='smile'  storage=t2
-@name name=t3 type='smile'  storage=t3
-@name name=t4 type='smile'  storage=t4
-@name name=t5 type='smile'  storage=t5
-@name name=t6 type='smile'  storage=t6
-@name name=t7 type='smile'  storage=t7
-@name_reg name=t0
-@name_reg name=t1
-@name_reg name=t2
-@name_reg name=t3
-@name_reg name=t4
-@name_reg name=t5
-@name_reg name=t6
-@name_reg name=t7
+@AutoImage_name name=t0 type='smile' storage=t0
+@AutoImage_name name=t0 type='cry'   storage=t0_1
+@AutoImage_name name=t0 type='surprise' storage=t0_2
+@AutoImage_name name=t0 type='smile'  storage=t0
+@AutoImage_name name=t1 type='smile'  storage=t1
+@AutoImage_name name=t2 type='smile'  storage=t2
+@AutoImage_name name=t3 type='smile'  storage=t3
+@AutoImage_name name=t4 type='smile'  storage=t4
+@AutoImage_name name=t5 type='smile'  storage=t5
+@AutoImage_name name=t6 type='smile'  storage=t6
+@AutoImage_name name=t7 type='smile'  storage=t7
+@AutoImage_name_reg name=t0
+@AutoImage_name_reg name=t1
+@AutoImage_name_reg name=t2
+@AutoImage_name_reg name=t3
+@AutoImage_name_reg name=t4
+@AutoImage_name_reg name=t5
+@AutoImage_name_reg name=t6
+@AutoImage_name_reg name=t7
 
 *diff1|
 差分表示します1[lr]
@@ -209,58 +209,58 @@
 @t0 pos=l method=m multi=true from=ul  time=500 smile
 @t1 pos=lc method=m multi=true from=ul time=500 smile
 @t2 pos=c method=m multi=true from=ul  time=500 smile
-@mm
-@wmm
+@AutoImage_mm
+@AutoImage_wmm
 同時に移動で消去[lr]
 @t0 dis method=m multi=true to=ur time=500 smile
 @t1 dis method=m multi=true to=ur time=500 smile
 @t2 dis method=m multi=true to=ur time=500 smile
-@mm
-@wmm
+@AutoImage_mm
+@AutoImage_wmm
 表示と消去を同時に[lr]
 @t0 pos=l method=m multi=true from=ul  time=500 smile
 @t1 pos=lc method=m multi=true from=ul time=500 smile
-@mm
-@wmm
+@AutoImage_mm
+@AutoImage_wmm
 [lr]
 
 @t2 pos=c method=m multi=true time=500 from=ll smile
 @t3 pos=rc method=m multi=true time=500 from=r smile
 @t0 dis method=m multi=true time=500 from=br smile
 @t1 dis method=m multi=true time=500 from=ur smile
-@mm
-@wmm
+@AutoImage_mm
+@AutoImage_wmm
 [lr]
 
 *mt|
 同時にトランスで表示[lr]
 @t0 pos=l multi=true smile
 @t1 pos=lc multi=true smile
-@mt
-@wmt
+@AutoImage_mt
+@AutoImage_wmt
 
 同時にトランスで消去[lr]
 @t2 dis multi=true smile
 @t3 dis multi=true smile
-@mt
-@wmt
+@AutoImage_mt
+@AutoImage_wmt
 
 表示と消去を同時に[lr]
 @t2 pos=r  multi=true smile
 @t3 pos=rc multi=true smile
 @t0 dis multi=true smile
 @t1 dis multi=true smile
-@mt
-@wmt
+@AutoImage_mt
+@AutoImage_wmt
 
 *cac|
 一時的に全部消します[lr]
-@tempcai
+@AutoImage_tempcai
 表示します[lr]
-@untempcai
+@AutoImage_untempcai
 全部消します[lr]
-@cai
-@wmt
+@AutoImage_cai
+@AutoImage_wmt
 [l]
 
 *et|
@@ -274,12 +274,12 @@
 同時に表示します[lr]
 @t2 multi=true method=t smile
 @t3 multi=true method=t left=300 top=20 smile
-@mt
-@wmt
+@AutoImage_mt
+@AutoImage_wmt
 
 [l]
-@cai
-@wmt
+@AutoImage_cai
+@AutoImage_wmt
 [l]
 *em|
 移動で回転拡大縮小表示します[lr]
@@ -290,8 +290,8 @@
 同時に表示します[lr]
 @t2 multi=true method=m time=1000 scale=200 smile
 @t3 multi=true method=m left=300 top=20 from=b time=1000 scale=40 smile
-@mm
-@wmm
+@AutoImage_mm
+@AutoImage_wmm
 
 [l]
 移動で回転拡大縮小消去します[lr]
@@ -302,7 +302,9 @@
 同時に消去します[lr]
 @t2 dis multi=true method=m time=1000 smile
 @t3 dis multi=true method=m path="(800,300,0,30,0)" time=1000 smile
-@mm
-@wmm
+@AutoImage_mm
+@AutoImage_wmm
 [l]
 @AutoImage_reset
+最初に戻ります
+@call target=*diff1
