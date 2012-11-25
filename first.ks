@@ -11,7 +11,6 @@
 @AutoImage_name name=t0 type='smile' storage=t0
 @AutoImage_name name=t0 type='cry'   storage=t0_1
 @AutoImage_name name=t0 type='surprise' storage=t0_2
-@AutoImage_name name=t0 type='smile'  storage=t0
 @AutoImage_name name=t1 type='smile'  storage=t1
 @AutoImage_name name=t2 type='smile'  storage=t2
 @AutoImage_name name=t3 type='smile'  storage=t3
@@ -27,6 +26,40 @@
 @AutoImage_name_reg name=t5
 @AutoImage_name_reg name=t6
 @AutoImage_name_reg name=t7
+
+*pos|
+自動でポジションを決めます。[lr]
+@t0 smile
+@wt
+[l]
+@t1 smile
+@wt
+[l]
+@t2 smile
+@wt
+[l]
+@t3 smile
+@wt
+[l]
+@t4 smile
+@wt
+
+消去します[lr]
+@t0 dis
+@wt
+[l]
+@t1 dis
+@wt
+[l]
+@t2 dis
+@wt
+[l]
+@t3 dis
+@wt
+[l]
+@t4 dis
+@wt
+[l]
 
 *diff1|
 差分表示します1[lr]
@@ -97,19 +130,19 @@
 
 *tdis|
 トランスで消去します[lr]
-@t0 dis smile
+@t0 dis
 @wt
 [l]
-@t1 dis smile
+@t1 dis
 @wt
 [l]
-@t2 dis smile
+@t2 dis
 @wt
 [l]
-@t3 dis smile
+@t3 dis
 @wt
 [l]
-@t4 dis smile
+@t4 dis
 @wt
 [l]
 
@@ -132,19 +165,19 @@
 [l]
 
 *mdis|
-@t0 dis method=m to=l smile
+@t0 dis method=m to=l
 @wm
 [l]
-@t1 dis method=m to=t smile
+@t1 dis method=m to=t
 @wm
 [l]
-@t2 dis method=m to=r smile
+@t2 dis method=m to=r
 @wm
 [l]
-@t3 dis method=m to=b smile
+@t3 dis method=m to=b
 @wm
 [l]
-@t4 dis  method=m to=bl smile
+@t4 dis  method=m to=bl
 @wm
 [l]
 
@@ -159,13 +192,13 @@
 [l]
 
 *mdis2|
-@t5 dis  method=m to=bt smile
+@t5 dis  method=m to=bt
 @wm
 [l]
-@t6 dis  method=m to=br smile
+@t6 dis  method=m to=br
 @wm
 [l]
-@t7 dis  method=m to=bb smile
+@t7 dis  method=m to=bb
 @wm
 [l]
 
@@ -188,19 +221,19 @@
 
 *mdis3|
 移動で消去します2[lr]
-@t0 dis method=m to=ul smile
+@t0 dis method=m to=ul
 @wm
 [l]
-@t1 dis method=m to=ll smile
+@t1 dis method=m to=ll
 @wm
 [l]
-@t2 dis method=m to=ur smile
+@t2 dis method=m to=ur
 @wm
 [l]
-@t3 dis method=m to=lr smile
+@t3 dis method=m to=lr
 @wm
 [l]
-@t4 dis  method=m to=b smile
+@t4 dis  method=m to=b
 @wm
 [l]
 
@@ -212,9 +245,9 @@
 @AutoImage_mm
 @AutoImage_wmm
 同時に移動で消去[lr]
-@t0 dis method=m multi=true to=ur time=500 smile
-@t1 dis method=m multi=true to=ur time=500 smile
-@t2 dis method=m multi=true to=ur time=500 smile
+@t0 dis method=m multi=true to=ur time=500
+@t1 dis method=m multi=true to=ur time=500 
+@t2 dis method=m multi=true to=ur time=500 
 @AutoImage_mm
 @AutoImage_wmm
 表示と消去を同時に[lr]
@@ -225,9 +258,9 @@
 [lr]
 
 @t2 pos=c method=m multi=true time=500 from=ll smile
-@t3 pos=rc method=m multi=true time=500 from=r smile
-@t0 dis method=m multi=true time=500 from=br smile
-@t1 dis method=m multi=true time=500 from=ur smile
+@t3 pos=rc method=m multi=true time=500 from=rr smile
+@t0 dis method=m multi=true time=500 from=br
+@t1 dis method=m multi=true time=500 from=ur
 @AutoImage_mm
 @AutoImage_wmm
 [lr]
@@ -240,16 +273,16 @@
 @AutoImage_wmt
 
 同時にトランスで消去[lr]
-@t2 dis multi=true smile
-@t3 dis multi=true smile
+@t2 dis multi=true
+@t3 dis multi=true
 @AutoImage_mt
 @AutoImage_wmt
 
 表示と消去を同時に[lr]
 @t2 pos=r  multi=true smile
 @t3 pos=rc multi=true smile
-@t0 dis multi=true smile
-@t1 dis multi=true smile
+@t0 dis multi=true
+@t1 dis multi=true
 @AutoImage_mt
 @AutoImage_wmt
 
@@ -295,16 +328,16 @@
 
 [l]
 移動で回転拡大縮小消去します[lr]
-@t0 dis method=m time=1000 to=t smile
+@t0 dis method=m time=1000 to=t
 [l]
-@t1 dis method=m path="(300,200,0,50,0)" time=1000 smile
+@t1 dis method=m path="(300,200,0,50,0)" time=1000
 [l]
 同時に消去します[lr]
 @t2 dis multi=true method=m time=1000 smile
-@t3 dis multi=true method=m path="(800,300,0,30,0)" time=1000 smile
+@t3 dis multi=true method=m path="(800,300,0,30,0)" time=1000
 @AutoImage_mm
 @AutoImage_wmm
 [l]
 @AutoImage_reset
 最初に戻ります
-@call target=*diff1
+@call target=*pos

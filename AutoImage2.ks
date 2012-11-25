@@ -219,6 +219,7 @@ var names = %[]; //name
 			 // nowlayer
 			 // nowcount
 			 // nowscale
+			 // nowpos
 var namedata = %[];
                  //name   type
 				 // storage
@@ -226,6 +227,7 @@ var namedata = %[];
 				 // height
 var autolayer; //プラグインが管理するレイヤ
 var chosedlayer = %[]; //使用済レイヤ
+var chosedpos = %[]; //使用済ポジション
 var count = 0; //マルチトランス、ムーブのためのカウンｔ
 var pre_count = 0; //マルチトランス、ムーブのためのカウント
 f.AutoImage_dic = %[];
@@ -244,6 +246,8 @@ f.AutoImage_dic = %[];
 		dic.multi.assign(multi);
 		dic.chosedlayer = %[];
 		(Dictionary.assign incontextof dic.chosedlayer)(chosedlayer);
+		dic.chosedpos = %[];
+		(Dictionary.assign incontextof dic.chosedpos)(chosedpos);
 		dic.count = count;
 		dic.pre_count = pre_count;
 	}
@@ -261,6 +265,7 @@ f.AutoImage_dic = %[];
 			(Dictionary.assign incontextof names)(dic.names);
 			multi.assign(dic.multi);
 			(Dictionary.assign incontextof chosedlayer)(dic.chosedlayer);
+			(Dictionary.assign incontextof chosedpos)(dic.chosedpos);
 			count = dic.count;
 			pre_count = dic.pre_count;
 		}
@@ -285,16 +290,16 @@ f.AutoImage_dic = %[];
 			namedata[.name][.type].storage = .storage;
 		}
 	}
-	function pos_to_LeftTop(elm)
+	function pos_to_LeftTop(elm) //posからleft, topを設定する, 高さを設定しなおすために 同時にposの選択状態を記録する
 	{
 		with(elm)
 		{
 			.top  = namedata[.name][.type].top;
-			.left = kag.scPositionX.left         - namedata[.name][.type].width * .scale / 100 / 2 if .pos ==  'l'  || .pos == 'left';
-			.left = kag.scPositionX.left_center  - namedata[.name][.type].width * .scale / 100 / 2 if .pos ==  'lc' || .pos == 'left_center';
-			.left = kag.scPositionX.center       - namedata[.name][.type].width * .scale / 100 / 2 if .pos ==  'c'  || .pos == 'center';
-			.left = kag.scPositionX.right_center - namedata[.name][.type].width * .scale / 100 / 2 if .pos ==  'rc' || .pos == 'right_center';
-			.left = kag.scPositionX.right        - namedata[.name][.type].width * .scale / 100 / 2 if .pos ==  'r'  || .pos == 'right';
+			names[.name].nowpos = 'left'         ,chosedpos.left         = 1, .left = kag.scPositionX.left         - namedata[.name][.type].width * .scale / 100 / 2 if .pos == 'l'  || .pos == 'left';
+			names[.name].nowpos = 'left_center'  ,chosedpos.left_center  = 1, .left = kag.scPositionX.left_center  - namedata[.name][.type].width * .scale / 100 / 2 if .pos == 'lc' || .pos == 'left_center';
+			names[.name].nowpos = 'center'       ,chosedpos.center       = 1, .left = kag.scPositionX.center       - namedata[.name][.type].width * .scale / 100 / 2 if .pos == 'c'  || .pos == 'center';
+			names[.name].nowpos = 'right_center' ,chosedpos.right_center = 1, .left = kag.scPositionX.right_center - namedata[.name][.type].width * .scale / 100 / 2 if .pos == 'rc' || .pos == 'right_center';
+			names[.name].nowpos = 'right'        ,chosedpos.right        = 1, .left = kag.scPositionX.right        - namedata[.name][.type].width * .scale / 100 / 2 if .pos == 'r'  || .pos == 'right';
 		}
 	}
 	//レイヤーを開放
@@ -302,6 +307,12 @@ f.AutoImage_dic = %[];
 	{
 		chosedlayer[elm.layer] = false;
 		names[elm.name].nowcount -= 1;
+		chosedpos.left         = 1 if names[elm.name].nowpos == 'left';
+		chosedpos.left_center  = 1 if names[elm.name].nowpos == 'left_center';
+		chosedpos.center       = 1 if names[elm.name].nowpos == 'center';
+		chosedpos.right_center = 1 if names[elm.name].nowpos == 'right_center';
+		chosedpos.right        = 1 if names[elm.name].nowpos == 'right';
+		delete names[elm.name].nowpos;
 		delete names[elm.name].nowtype;
 		delete names[elm.name].nowscale;
 		delete names[elm.name].nowlayer;
@@ -330,6 +341,14 @@ f.AutoImage_dic = %[];
 				return elm.layer;
 		}
 	}
+	function getpos() //空いているポジションを返す
+	{
+		if (!chosedpos.center)       return 'center';
+		if (!chosedpos.right)        return 'right';
+		if (!chosedpos.left)         return 'left';
+		if (!chosedpos.right_center) return 'right_center';
+		if (!chosedpos.left_center)  return 'left_center';
+	}
 	function reset()
 	{
 		for ( var i=0; i<kag.numCharacterLayers; i++ )
@@ -345,6 +364,11 @@ f.AutoImage_dic = %[];
 		}
 		count = 0;
 		pre_count = 0;
+		chosedpos.left         = 0;
+		chosedpos.left_center  = 0;
+		chosedpos.center       = 0;
+		chosedpos.right_center = 0;
+		chosedpos.right        = 0;
 	}
 	function clearall()
 	{
@@ -376,7 +400,7 @@ f.AutoImage_dic = %[];
 	{
 		with(elm)
 		{
-			if (.left === void && .top === void && .pos === void) .pos = 'center'; //未指定ならposをcenterに
+			if (.left === void && .top === void && .pos === void) .pos = getpos(); //未指定ならposを自動決定
 			.scale = 100 if .scale === void;
 			.angle = 0 if .angle === void;
 			
@@ -396,7 +420,7 @@ f.AutoImage_dic = %[];
 				{
 					if (.left === void && .top === void)
 						pos_to_LeftTop(elm);
-					set_position(elm, .left, .top); //left, topが指定されていたら
+					set_position(elm, .left, .top);
 				}
 				else if (.path !== void)
 				{
