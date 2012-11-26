@@ -61,6 +61,41 @@
 @wt
 [l]
 
+*pos2|
+ポジションを指定します。[lr]
+@t0 smile center
+@wt
+[l]
+@t1 smile l
+@wt
+[l]
+@t2 smile r
+@wt
+[l]
+@t3 smile lc
+@wt
+[l]
+@t4 smile rc
+@wt
+
+消去します[lr]
+@t0 dis
+@wt
+[l]
+@t1 dis
+@wt
+[l]
+@t2 dis
+@wt
+[l]
+@t3 dis
+@wt
+[l]
+@t4 dis
+@wt
+[l]
+
+
 *diff1|
 差分表示します1[lr]
 @t0 smile

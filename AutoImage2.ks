@@ -400,7 +400,7 @@ f.AutoImage_dic = %[];
 	{
 		with(elm)
 		{
-			if (.left === void && .top === void && .pos === void) .pos = getpos(); //–¢Žw’è‚È‚çpos‚ðŽ©“®Œˆ’è
+			if (.left === void && .top === void && findpos(elm) === void) .pos = getpos(); //–¢Žw’è‚È‚çpos‚ðŽ©“®Œˆ’è
 			.scale = 100 if .scale === void;
 			.angle = 0 if .angle === void;
 			
@@ -484,6 +484,21 @@ f.AutoImage_dic = %[];
 		multi[multi.count - 1].delay  = elm.delay;
 		multi[multi.count - 1].cx     = elm.cx;
 		multi[multi.count - 1].cy     = elm.cy;
+	}
+	function findpos(elm)
+	{
+		if (elm.pos !== void)
+			return elm.pos;
+		var poskeys = ['left', 'left_center', 'center', 'right_center', 'right'];
+		var shortposkeys = ['l', 'lc', 'c', 'rc', 'r'];
+		for (var i = 0; i < 5; i++)
+		{
+			if (elm[poskeys[i]] !== void || elm[shortposkeys[i]])
+			{
+				return elm.pos = poskeys[i];
+			}
+		}
+		return void;
 	}
 	function gettype(elm)
 	{
