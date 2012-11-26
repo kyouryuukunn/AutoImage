@@ -146,6 +146,11 @@ type		:type=XXXでもそのままXXXとしてもよい
 		 但し空白ははさめない
 (例)
 @app name=nameID XXX
+pos		:pos=centerでもそのままcenterとしてもよい
+(例)
+@app name=nameID pos=right_center
+@app name=nameID right_center
+@app name=nameID rc
 
 @AutoImage_nameで設定したnameIDとtypeからファイルを表示する。
 
@@ -164,6 +169,7 @@ multi		:同時実行する。デフォルト値はfalse
 		 
 method		:表示方法を指定デフォルト値はt
 		 下記参照
+
 
 
 method=t
