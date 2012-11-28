@@ -134,7 +134,7 @@
 @wt
 @wm
 [l]
-@t0 cry method='mt' path="(0, 0, 255, 200, 0)"
+@t0 cry mt path="(0, 0, 255, 200, 0)"
 @wt
 @wm
 [l]
@@ -160,7 +160,7 @@
 @t3 pos=rc smile
 @wt
 [l]
-@t4 method=t pos=r smile
+@t4 tr pos=r smile
 @wt
 
 *tdis|
@@ -183,119 +183,119 @@
 
 *ml|
 à⁄ìÆÇ≈ï\é¶, è¡ãéÇµÇ‹Ç∑1[lr]
-@t0 method=m from=l  pos=l smile
+@t0 mv from=l  pos=l smile
 @wm
 [l]
-@t1 method=m from=t  pos=lc smile
+@t1 mv from=t  pos=lc smile
 @wm
 [l]
-@t2 method=m from=r pos=c smile
+@t2 mv from=r pos=c smile
 @wm
 [l]
-@t3 method=m from=b pos=rc smile
+@t3 mv from=b pos=rc smile
 @wm
 [l]
-@t4 method=m from=bl pos=r smile
+@t4 mv from=bl pos=r smile
 @wm
 [l]
 
 *mdis|
-@t0 dis method=m to=l
+@t0 dis mv to=l
 @wm
 [l]
-@t1 dis method=m to=t
+@t1 dis mv to=t
 @wm
 [l]
-@t2 dis method=m to=r
+@t2 dis mv to=r
 @wm
 [l]
-@t3 dis method=m to=b
+@t3 dis mv to=b
 @wm
 [l]
-@t4 dis  method=m to=bl
+@t4 dis  mv to=bl
 @wm
 [l]
 
-@t5 method=m from=bt pos=l smile
+@t5 mv from=bt pos=l smile
 @wm
 [l]
-@t6 method=m from=br pos=lc smile
+@t6 mv from=br pos=lc smile
 @wm
 [l]
-@t7 method=m from=bb pos=c smile
+@t7 mv from=bb pos=c smile
 @wm
 [l]
 
 *mdis2|
-@t5 dis  method=m to=bt
+@t5 dis  mv to=bt
 @wm
 [l]
-@t6 dis  method=m to=br
+@t6 dis  mv to=br
 @wm
 [l]
-@t7 dis  method=m to=bb
+@t7 dis  mv to=bb
 @wm
 [l]
 
 à⁄ìÆÇ≈ï\é¶ÇµÇ‹Ç∑2[lr]
-@t0 method=m from=ul  pos=l smile
+@t0 mv from=ul  pos=l smile
 @wm
 [l]
-@t1 method=m from=ll  pos=lc smile
+@t1 mv from=ll  pos=lc smile
 @wm
 [l]
-@t2 method=m from=b pos=c smile
+@t2 mv from=b pos=c smile
 @wm
 [l]
-@t3 method=m from=ur pos=rc smile
+@t3 mv from=ur pos=rc smile
 @wm
 [l]
-@t4 method=m from=lr pos=r smile
+@t4 mv from=lr pos=r smile
 @wm
 [l]
 
 *mdis3|
 à⁄ìÆÇ≈è¡ãéÇµÇ‹Ç∑2[lr]
-@t0 dis method=m to=ul
+@t0 dis mv to=ul
 @wm
 [l]
-@t1 dis method=m to=ll
+@t1 dis mv to=ll
 @wm
 [l]
-@t2 dis method=m to=ur
+@t2 dis mv to=ur
 @wm
 [l]
-@t3 dis method=m to=lr
+@t3 dis mv to=lr
 @wm
 [l]
-@t4 dis  method=m to=b
+@t4 dis  mv to=b
 @wm
 [l]
 
 *mm|
 ìØéûÇ…à⁄ìÆÇ≈ï\é¶[lr]
-@t0 pos=l method=m multi=true from=ul  time=500 smile
-@t1 pos=lc method=m multi=true from=ul time=500 smile
-@t2 pos=c method=m multi=true from=ul  time=500 smile
+@t0 pos=l mv multi=true from=ul  time=500 smile
+@t1 pos=lc mv multi=true from=ul time=500 smile
+@t2 pos=c mv multi=true from=ul  time=500 smile
 @AutoImage_mm
 @AutoImage_wmm
 ìØéûÇ…à⁄ìÆÇ≈è¡ãé[lr]
-@t0 dis method=m multi=true to=ur time=500
-@t1 dis method=m multi=true to=ur time=500 
-@t2 dis method=m multi=true to=ur time=500 
+@t0 dis mv multi=true to=ur time=500
+@t1 dis mv multi=true to=ur time=500 
+@t2 dis mv multi=true to=ur time=500 
 @AutoImage_mm
 @AutoImage_wmm
 ï\é¶Ç∆è¡ãéÇìØéûÇ…[lr]
-@t0 pos=l method=m multi=true from=ul  time=500 smile
-@t1 pos=lc method=m multi=true from=ul time=500 smile
+@t0 pos=l mv multi=true from=ul  time=500 smile
+@t1 pos=lc mv multi=true from=ul time=500 smile
 @AutoImage_mm
 @AutoImage_wmm
 [lr]
 
-@t2 pos=c method=m multi=true time=500 from=ll smile
-@t3 pos=rc method=m multi=true time=500 from=rr smile
-@t0 dis method=m multi=true time=500 from=br
-@t1 dis method=m multi=true time=500 from=ur
+@t2 pos=c mv multi=true time=500 from=ll smile
+@t3 pos=rc mv multi=true time=500 from=rr smile
+@t0 dis mv multi=true time=500 from=br
+@t1 dis mv multi=true time=500 from=ur
 @AutoImage_mm
 @AutoImage_wmm
 [lr]
@@ -333,15 +333,15 @@
 
 *et|
 ÉgÉâÉìÉXÇ≈âÒì]ägëÂèkè¨ï\é¶ÇµÇ‹Ç∑[lr]
-@t0 method=t scale=200 smile
+@t0 tr scale=200 smile
 @wt
 [l]
-@t1 left=400 method=t top=200 scale=50 angle=30 smile
+@t1 left=400 tr top=200 scale=50 angle=30 smile
 @wt
 [l]
 ìØéûÇ…ï\é¶ÇµÇ‹Ç∑[lr]
-@t2 multi=true method=t smile
-@t3 multi=true method=t left=300 top=20 smile
+@t2 multi=true tr smile
+@t3 multi=true tr left=300 top=20 smile
 @AutoImage_mt
 @AutoImage_wmt
 
@@ -351,25 +351,25 @@
 [l]
 *em|
 à⁄ìÆÇ≈âÒì]ägëÂèkè¨ï\é¶ÇµÇ‹Ç∑[lr]
-@t0 method=m time=1000 path=(300,300,255,200,0) smile
+@t0 mv time=1000 path=(300,300,255,200,0) smile
 [l]
-@t1 method=m left=1 top=1 from=l scale=50 time=1000 smile
+@t1 mv left=1 top=1 from=l scale=50 time=1000 smile
 [l]
 ìØéûÇ…ï\é¶ÇµÇ‹Ç∑[lr]
-@t2 multi=true method=m time=1000 scale=200 smile
-@t3 multi=true method=m left=300 top=20 from=b time=1000 scale=40 smile
+@t2 multi=true mv time=1000 scale=200 smile
+@t3 multi=true mv left=300 top=20 from=b time=1000 scale=40 smile
 @AutoImage_mm
 @AutoImage_wmm
 
 [l]
 à⁄ìÆÇ≈âÒì]ägëÂèkè¨è¡ãéÇµÇ‹Ç∑[lr]
-@t0 dis method=m time=1000 to=t
+@t0 dis mv time=1000 to=t
 [l]
-@t1 dis method=m path="(300,200,0,50,0)" time=1000
+@t1 dis mv path="(300,200,0,50,0)" time=1000
 [l]
 ìØéûÇ…è¡ãéÇµÇ‹Ç∑[lr]
-@t2 dis multi=true method=m time=1000 smile
-@t3 dis multi=true method=m path="(800,300,0,30,0)" time=1000
+@t2 dis multi=true mv time=1000 smile
+@t3 dis multi=true mv path="(800,300,0,30,0)" time=1000
 @AutoImage_mm
 @AutoImage_wmm
 [l]

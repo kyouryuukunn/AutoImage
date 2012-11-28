@@ -6,7 +6,7 @@
 色々な墓場のキャラクターレイヤ管理プラグインの動作を参考にしているが、
 こっちは立ち絵の整列は行なわない
 大部分はkagで書かれており、表示、消去のテンプレートな動作があるなら、
-methodに追加すればよい。
+method2に追加すればよい。
 eximage2.ks,exmove.ksを組み込んでいるので回転拡大縮小移動も可能
 但し上記の2つのプラグインの仕様上背景レイヤには使えない
 またレイヤ番号は f.nameID に入っているので、手動で操作も出来る。
@@ -145,12 +145,12 @@ name		:nameIDを指定する
 type		:type=XXXでもそのままXXXとしてもよい
 		 但し空白ははさめない
 (例)
-@app name=nameID XXX
+@AutoImage_app name=nameID XXX
 pos		:pos=centerでもそのままcenterとしてもよい
 (例)
-@app name=nameID pos=right_center
-@app name=nameID right_center
-@app name=nameID rc
+@AutoImage_app name=nameID pos=right_center
+@AutoImage_app name=nameID right_center
+@AutoImage_app name=nameID rc
 
 @AutoImage_nameで設定したnameIDとtypeからファイルを表示する。
 
@@ -158,28 +158,30 @@ layer		:自分でレイヤを指定してもよい
 		 背景として使うならここも指定する
 
 multi		:同時実行する。デフォルト値はfalse
-		 methodがt,mで指定可能
+		 method2がtr,mvで指定可能
 		 設定後に
-		 method=tなら@AutoImage_mt
-		 method=mなら@AutoImage_mm
+		 method2=trなら@AutoImage_mt
+		 method2=mvなら@AutoImage_mm
 		 で実行する
 		 設定後すぐに実行すること、
 		 表示と消去を同時におこなう時は、表示してから消去する
 		 (消去した時点でレイヤを開放してしまう)
 		 
-method		:表示方法を指定デフォルト値はt
+method2		:表示方法を指定デフォルト値はtr
+		 method2=trでもそのままtrとしてもよい
 		 下記参照
+(例)
+@AutoImage_app name=nameID XXX method2=tr
+@AutoImage_app name=nameID XXX tr
 
 
-
-method=t
+method2=tr
 トランジションで表示
 回転拡大縮小してトランジションで表示
-トランジションのmethodはtmethodで指定する。
 その他はeximage,transと同じ属性名を持つ
-@AutoImage_app name=nameID type=XXX method=t pos=(center) multi=(false)  time=(500)
+@AutoImage_app name=nameID type=XXX method2=tr pos=(center) multi=(false)  time=(500)
 
-method=m
+method2=mv
 任意の場所から回転拡大縮小しながら任意の場所に表示
 pathを設定すると、left,topから、pathに移動して表示
 (拡大縮小回転を伴うとき、pathの第一、第二引数は画像の中心を示す)
@@ -214,13 +216,13 @@ fromには
 
 その他はeximage,exmoveと同じ属性名を持つ
 
-@app name=nameID type= method=m accel= time=(500) from=(left)
+@AutoImage_app name=nameID type= method2=mv accel= time=(500) from=(left)
 
-method=n
+method2=no
 直接表画面に表示
 その他はeximageを同じ属性名を持つ
 (例)
-@AutoImage_app name=nameID type= method=n
+@AutoImage_app name=nameID type= method2=no
 
 ---------------------------------------------------------------------------- 
 @AutoImage_diff
@@ -234,13 +236,17 @@ type		:type=XXXでもそのままXXXとしてもよい
 		 但し空白ははさめない
 任意
 multi		:デフォルト値false
-		 methodがtの時指定可能
+		 method2がtの時指定可能
 		 設定後@AutoImage_mtで実行、@AutoImage_wmtで待つ
-method		:デフォルト値はt
-		 tならトランジション
+method2		:デフォルト値はtr
+		 trならトランジション
 		 mtならトランジションしながら
 		 移動する
-tmethod		:transのmethodと同じ
+		 method2=trでもそのままtrとしてもよい
+		 下記参照
+(例)
+@AutoImage_diff name=nameID XXX method2=tr
+@AutoImage_diff name=nameID XXX tr
 
 
 その他はeximage,transと同じ属性名を持つ
@@ -258,28 +264,32 @@ nameID		:nameIDを指定する
 
 任意
 multi		:同時実行する。デフォルト値はfalse
-		 methodがt,mで指定可能
-		 設定後にmethod=t,なら@AutoImage_mt
-		 設定後にmethod=mなら@AutoImage_mm
+		 method2がt,mで指定可能
+		 設定後にmethod2=tr,なら@AutoImage_mt
+		 設定後にmethod2=mvなら@AutoImage_mm
 		 で実行する
 		 設定したら、すぐに実行すること、
 		 表示と消去を同時におこなう時は、表示してから消去する
 		 (消去した時点でレイヤが開放してしまう
 
-method		:表示方法を指定デフォルト値はt
+method2		:表示方法を指定デフォルト値はtr
+		 method2=trでもそのままtrとしてもよい
+		 下記参照
+(例)
+@AutoImage_dis name=nameID method2=tr
+@AutoImage_dis name=nameID tr
 
 *下記参照
 
-method=t
+method2=tr
 トランジション
-トランジションのmethodはtmethodで指定する。
-その他はtransと同じ属性名を持つ
-@dis name=nameID method=(t) multi=(false) time=
+transと同じ属性名を持つ
+@dis name=nameID method2=(t) multi=(false) time=
 
-method=m
+method2=mv
 toで指定した方向に移動して消去
 pathを設定すると任意の場所に移動して消去
-@dis name=nameID method=m path= to=(right) time= accel=
+@dis name=nameID method2=mv path= to=(right) time= accel=
 toの引数には
 	left
 	right
@@ -309,9 +319,9 @@ toの引数には
 を指定可能、それぞれの動作はサンプルを参照
 その他は@exmoveと同じ属性名を持つ
 
-method=n
+method2=no
 何もせず消去
-@dis name=nameID method=n
+@dis name=nameID method2=no
 
 ---------------------------------------------------------------------------- 
 @AutoImage_mm
@@ -337,8 +347,7 @@ method=n
 ---------------------------------------------------------------------------- 
 前景を全て消す
 @AutoImage_cai
-tmethod		:transのmethodと同じ
-他は@transと同じ属性名を持つ
+@transと同じ属性名を持つ
 @AutoImage_wmtで待つ
 
 ---------------------------------------------------------------------------- 

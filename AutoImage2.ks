@@ -28,10 +28,9 @@
 @eval exp="AutoImage_obj.names[mp.name].nowcount += 1"
 @eval exp="AutoImage_obj.names[mp.name].nowlayer = mp.layer"
 @eval exp="f[mp.name] = mp.layer"
-@eval exp="mp.method = 't' if mp.method === void"
 @eval exp="mp.time = 500 if mp.time === void"
 
-@if exp="mp.method == 't'"
+@if exp="AutoImage_obj.getmethod(mp) == 'tr'"
 	@trace exp="'method=t'"
 	@backlay cond="AutoImage_obj.count==0"
 	@eval exp="AutoImage_obj.count+=1 if mp.multi"
@@ -39,9 +38,9 @@
 	@eximage * page=back visible=true opacity=%opacity|255
 	@if exp="!mp.multi"
 		@eval exp="delete mp.layer"
-		@trans * method=%tmethod|crossfade
+		@trans * method=%method|crossfade
 	@endif
-@elsif exp="mp.method == 'm'"
+@elsif exp="AutoImage_obj.getmethod(mp) == 'mv'"
 	@trace exp="'method=m'"
 	@eval exp="AutoImage_obj.set_app_position(mp)"
 	@eximage * visible=true 
@@ -51,7 +50,7 @@
 		@eval exp="AutoImage_obj.multistock(mp)"
 		@eval exp="AutoImage_obj.count+=1"
 	@endif
-@elsif exp="mp.method == 'n'"
+@elsif exp="AutoImage_obj.getmethod(mp) == 'no'"
 	@trace exp="'method=n'"
 	@eval exp="AutoImage_obj.set_app_position(mp)"
 	@eximage * page=fore visible=true opacity=%opacity|255
@@ -67,60 +66,39 @@
 @eval exp="mp.storage = AutoImage_obj.namedata[mp.name][mp.type].storage"
 @eval exp="mp.time = 500 if mp.time === void"
 
-@eval exp="mp.method = 't' if mp.method === void"
-@if exp="mp.method == 't'"
+@if exp="AutoImage_obj.getmethod(mp) == 'tr'"
 	@backlay cond="AutoImage_obj.count==0"
 	@eval exp="AutoImage_obj.count+=1 if mp.multi"
 	@eximage * page=back visible=true left="&kag.fore.layers[mp.layer].left" top="&kag.fore.layers[mp.layer].top" scale="&AutoImage_obj.names[mp.name].nowscale"
 	@if exp="!mp.multi"
 		@eval exp="delete mp.layer"
-		@trans * method=%tmethod|crossfade
+		@trans * method=%method|crossfade
 	@endif
-@elsif exp="mp.method == 'mt'"
+@elsif exp="AutoImage_obj.getmethod(mp) == 'mt'"
 	@backlay
 	@eximage * page=back visible=true left="&kag.fore.layers[mp.layer].left" top="&kag.fore.layers[mp.layer].top" scale="&AutoImage_obj.names[mp.name].nowscale"
-	@trans * method=%tmethod|crossfade
+	@trans * method=%method|crossfade
 	@exmove *
 @endif
 @eval exp="AutoImage_obj.names[mp.name].nowtype = mp.type"
 @endmacro
 
 ;画像クリア
-;消去したい画像のnameIDを指定
-
-;トランジション
-;一度に複数の画像を消去するときは、multi=trueにしてまとめて@mtをする。
-;@ci name=nameID layer= method=(t) multi=(false) time=
-
-;toに移動して消去
-;一度に複数の画像を消去するときは、multi=trueにしてまとめて@mmをする。
-;pathを設定すると任意の場所に移動して消去
-;@ci name=nameID layer= method=m path= to=(right) time= accel=
-
-;任意の場所に回転拡大縮小しながら移動して消去
-;toを設定すると,移動して消去
-;pathを設定すると,任意の場所に回転拡大縮小しながら移動,
-;一度に複数の画像を消去するときは、multi=trueにしてまとめて@mmをする。
-;@ci name=nameID layer= method=em path= time= accel= spline= cx= cy=
-
-;何もせず消去
-;@dis name=nameID method=n
 @macro name=AutoImage_dis
 @eval exp="mp.layer = AutoImage_obj.names[mp.name].nowlayer"
-@eval exp="mp.method = 't' if mp.method === void"
 @eval exp="mp.time = 500 if mp.time === void"
 
-@if exp="mp.method == 't'"
+@if exp="AutoImage_obj.getmethod(mp) == 'tr'"
 	@backlay cond="AutoImage_obj.count==0"
 	@eval exp="AutoImage_obj.count+=1 if mp.multi"
 	@freeimage * page=back
 	@if exp="!mp.multi"
 		@eval exp="mp.temp_layer = mp.layer"
 		@eval exp="delete mp.layer"
-		@trans * method=%tmethod|crossfade
+		@trans * method=%method|crossfade
 		@eval exp="mp.layer = mp.temp_layer"
 	@endif
-@elsif exp="mp.method == 'm'"
+@elsif exp="AutoImage_obj.getmethod(mp) == 'mv'"
 	@eval exp="AutoImage_obj.set_dis_position(mp)"
 	@if exp="!mp.multi"
 		@exmove *
@@ -128,7 +106,7 @@
 		@eval exp="AutoImage_obj.multistock(mp)"
 		@eval exp="AutoImage_obj.count+=1"
 	@endif
-@elsif exp="mp.method == 'n'"
+@elsif exp="AutoImage_obj.getmethod(mp) == 'no'"
 	@freeimage * page=fore
 @endif
 @eval exp="AutoImage_obj.freelayer(mp)"
@@ -151,7 +129,7 @@
 @macro name=AutoImage_mt
 ;待ちのためにバックアップ
 @eval exp="AutoImage_obj.pre_count = AutoImage_obj.count"
-@trans * method=%tmethod|crossfade time=%time|500
+@trans * method=%method|crossfade time=%time|500
 @eval exp="AutoImage_obj.count = 0"
 @endmacro
 
@@ -404,7 +382,7 @@ f.AutoImage_dic = %[];
 			.scale = 100 if .scale === void;
 			.angle = 0 if .angle === void;
 			
-			if (.method == 't' || .method == 'n')
+			if (.method2 == 'tr' || .method2 == 'no')
 			{
 				if (.left === void && .top === void) //left, topが未指定ならposであわせる
 				{
@@ -413,7 +391,7 @@ f.AutoImage_dic = %[];
 					pos_to_LeftTop(elm);
 				}
 			}
-			else if (.method == 'm')
+			else if (.method2 == 'mv')
 			{
 				if (.from === void && .path === void) .from = 'left'; //未指定ならfromをleftに
 				if (.from !== void)
@@ -499,6 +477,20 @@ f.AutoImage_dic = %[];
 			}
 		}
 		return void;
+	}
+	function getmethod(elm)
+	{
+		if (elm.method2 !== void)
+			return elm.method2;
+		var methodkeys = ['tr', 'mv', 'mt', 'no'];
+		for (var i = 0; i < 4; i++)
+		{
+			if (elm[methodkeys[i]] !== void)
+			{
+				return elm.method2 = methodkeys[i];
+			}
+		}
+		return elm.method2 = 'tr';
 	}
 	function gettype(elm)
 	{
